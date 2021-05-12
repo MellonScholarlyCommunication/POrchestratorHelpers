@@ -22,7 +22,23 @@ container['@context'] =  "http://www.w3.org/ns/ldp";
 container['@id'] = id;
 container['contains'] = [];
 
-fs.readdirSync(inbox).forEach( (f,_) => {
+let compareDate = function (f1, f2) {
+    let fd1 = fs.openSync(`${inbox}/${f1}`,'r');
+    let fd2 = fs.openSync(`${inbox}/${f2}`,'r');
+
+    let m1 = fs.fstatSync(fd1).mtime;
+    let m2 = fs.fstatSync(fd2).mtime;
+
+    fs.closeSync(fd1);
+    fs.closeSync(fd2);
+
+    if (m1 < m2) { return 1 }
+    if (m1 > m2) { return -1 }
+
+    return 0;
+}
+
+fs.readdirSync(inbox).sort(compareDate).forEach( (f,_) => {
     container['contains'].push(`${id}/${f}`);
 });
 
