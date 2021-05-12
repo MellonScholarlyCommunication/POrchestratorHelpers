@@ -3,6 +3,12 @@
 @Grab(group='org.apache.jena', module='jena-core', version='3.13.1')
 @Grab(group='com.github.jsonld-java', module='jsonld-java', version='0.9.0')
 
+import org.apache.jena.rdf.model.Model
+import org.apache.jena.rdf.model.Resource
+import org.apache.jena.rdf.model.ModelFactory
+import org.apache.jena.riot.RDFDataMgr
+import org.apache.jena.riot.RDFFormat
+
 def loadModel(inputStream, type) {
     Model model = ModelFactory.createDefaultModel()
     model.read(inputStream,"urn:x:base",type)
@@ -43,11 +49,44 @@ try {
     else if (outputType == 'RDFXML') {
         outputFormat = RDFFormat.RDFXML
     }
-    else if (outputType == 'N3') {
-        outputFormat = RDFFormat.N3
+    else if (outputType == 'NT') {
+        outputFormat = RDFFormat.NT
+    }
+    else if (outputType == 'NQ') {
+        outputFormat = RDFFormat.NQ
+    }
+    else if (outputType == 'TRIG') {
+        outputFormat = RDFFormat.NQ
     }
     else if (outputType == 'JSONLD') {
         outputFormat = RDFFormat.JSONLD
+    }
+    else if (outputType == 'JSONLD_COMPACT_FLAT') {
+        outputFormat = RDFFormat.JSONLD_COMPACT_FLAT
+    }
+    else if (outputType == 'JSONLD_COMPACT_PRETTY') {
+        outputFormat = RDFFormat.JSONLD_COMPACT_PRETTY
+    }
+    else if (outputType == 'JSONLD_COMPACT_FLAT') {
+        outputFormat = RDFFormat.JSONLD_COMPACT_FLAT
+    }
+    else if (outputType == 'JSONLD_FLATTEN_PRETTY') {
+        outputFormat = RDFFormat.JSONLD_FLATTEN_PRETTY
+    }
+    else if (outputType == 'JSONLD_FLATTEN_FLAT') {
+        outputFormat = RDFFormat.JSONLD_FLATTEN_FLAT
+    }
+    else if (outputType == 'JSONLD_FRAME_PRETTY') {
+        outputFormat = RDFFormat.JSONLD_FRAME_PRETTY
+    }
+    else if (outputType == 'JSONLD_FRAME_FLAT') {
+        outputFormat = RDFFormat.JSONLD_FRAME_FLAT
+    }
+    else if (outputType == 'JSONLD_PRETTY') {
+        outputFormat = RDFFormat.JSONLD_PRETTY
+    }
+    else if (outputType == 'JSONLD_FLAT') {
+        outputFormat = RDFFormat.JSONLD_FLAT
     }
 
     // Read/Write the file flowFile
