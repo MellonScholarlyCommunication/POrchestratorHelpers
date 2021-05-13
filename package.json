@@ -4,6 +4,8 @@
   },
   "dependencies": {
     "@dexagod/ldn-agent": "^1.0.2",
-    "shex": "^0.9.2"
+    "@types/url-parse": "^1.4.3",
+    "shex": "^0.9.2",
+    "url-parse": "^1.5.1"
   }
 }

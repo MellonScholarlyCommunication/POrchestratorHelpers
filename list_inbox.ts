@@ -1,6 +1,5 @@
 import * as fs from "fs";
 
-
 if (process.argv.length != 4) {
     console.log(`usage: ${process.argv[1]} id inbox`);
     process.exit(1);
