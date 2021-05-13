@@ -35,6 +35,13 @@ const req = http.request(
     response => {
         console.log(response.statusCode + ' : ' + response.statusMessage);
         console.log(response.headers);
+
+        if (response.statusCode == 200 || response.statusCode == 202) {
+            process.exit(0);
+        }
+        else {
+            process.exit(2);
+        }
     }
 );
 
