@@ -1,3 +1,20 @@
+/*
+
+Convert a Flow file from one format to another
+
+Required:
+  - Flow file with TURTLE, RDF/XML, JSON-LD,...
+  - Attribute `inputType` with the input type
+  - Attribute `outputType` with the output type
+
+
+Output:
+  - An updated flow with in the (new) format
+  - At error an attribute `error` with values:
+      - VALIDATION_ERROR : when the input is not valid
+      - PROCESS_ERROR : when the flow file or shape file can't be processed for some reason
+      - An `errorMessage` with the reason
+*/
 @Grab(group='org.topbraid', module='shacl', version='1.3.2')
 @Grab(group='commons-io', module='commons-io', version='2.8.0')
 @Grab(group='org.apache.jena', module='jena-core', version='3.13.1')
@@ -97,9 +114,9 @@ try {
     } as StreamCallback)
 }
 catch(e) {
-  outputRelation = REL_FAILURE
-  flowFile = session.putAttribute(flowFile, "error", "PROCESS_ERROR")
-  flowFile = session.putAttribute(flowFile, "errorMessage", e.getMessage())
+    outputRelation = REL_FAILURE
+    flowFile = session.putAttribute(flowFile, "error", "PROCESS_ERROR")
+    flowFile = session.putAttribute(flowFile, "errorMessage", e.getMessage())
 }
 
 session.transfer(flowFile, outputRelation)

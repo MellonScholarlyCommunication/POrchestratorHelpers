@@ -1,3 +1,24 @@
+/*
+
+Use SHACL rule expression to infer new triples from the input data
+
+Required:
+  - Flow file with TURTLE, RDF/XML, JSON-LD,...
+  - Attribute `shapesFile` with the location of a SHACL shapes file
+
+Optional:
+  - Attribute `dataType` with the format of the Flow file (TURTLE,N-TRIPLES,RDF/XML, JSON-LD)
+     - See https://jena.apache.org/documentation/io/rdf-input.html
+  - Attribute `shapesType` with the format of the Flow file (TURTLE,N-TRIPLES,RDF/XML, JSON-LD)
+  - Attribute `outputDestination` =  attribute | flowfile (default flowfile)
+
+Output:
+  - An updated flowfile with the result of the inference or a new attribute output
+  - At error an attribute `error` with values:
+      - VALIDATION_ERROR : when the input is not valid
+      - PROCESS_ERROR : when the flow file or shape file can't be processed for some reason
+      - An `errorMessage` with the reason
+*/
 @Grab(group='org.topbraid', module='shacl', version='1.3.2')
 @Grab(group='commons-io', module='commons-io', version='2.8.0')
 @Grab(group='org.apache.jena', module='jena-core', version='3.13.1')
@@ -10,6 +31,7 @@ import org.topbraid.jenax.util.JenaUtil
 import org.topbraid.shacl.rules.RuleUtil
 import org.topbraid.shacl.util.ModelPrinter
 import java.io.FileInputStream
+import java.io.ByteArrayOutputStream
 
 def loadModel(inputStream, type) {
     Model model = ModelFactory.createDefaultModel()
@@ -23,6 +45,7 @@ if (!flowFile) return
 
 outputRelation = REL_SUCCESS
 defaultInputType = "TURTLE"
+defaultOutputDestination = "flowfile"
 
 try {
   // Read the shapesFile attribute
@@ -44,16 +67,38 @@ try {
       shapesType = defaultInputType
   }
 
+  // Read the outputDestination attribute
+  outputDestination = flowFile.getAttribute("outputDestination")
+
+  if (!outputDestination) {
+      outputDestination = defaultOutputDestination
+  }
+
+  results = null
+
   // Read/Write the file flowFile
-  session.write(flowFile , { inputStream , outputStream ->
+  session.read(flowFile , { inputStream ->
       dataModel = loadModel(inputStream, dataType)
 
       shapesModel = loadModel(new FileInputStream(shapesFile), shapesType)
 
       results = RuleUtil.executeRules(dataModel, shapesModel, null, null)
+  } as InputStreamCallback)
 
-      results.write(outputStream, FileUtils.langTurtle)
-  } as StreamCallback)
+  if (outputDestination == "flowfile") {
+      session.write(flowFile, { outputStream ->
+          results.write(outputStream, FileUtils.langTurtle)
+      } as OutputStreamCallback)
+  }
+  else if (outputDestination == "attribute") {
+      stream = new ByteArrayOutputStream()
+      report.write(stream, FileUtils.langTurtle)
+
+      flowFile = session.putAttribute(flowFile, "output", new String(stream.toByteArray()))
+  }
+  else {
+      // Do nothing
+  }
 }
 catch(e) {
   outputRelation = REL_FAILURE
