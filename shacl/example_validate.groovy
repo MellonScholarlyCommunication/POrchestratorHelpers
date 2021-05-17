@@ -1,3 +1,5 @@
+#!/usr/bin/env groovy
+
 @Grab(group='org.topbraid', module='shacl', version='1.3.2')
 @Grab(group='commons-io', module='commons-io', version='2.8.0')
 @Grab(group='org.apache.jena', module='jena-core', version='3.13.1')
@@ -20,7 +22,7 @@ def loadModel(fileName, type) {
 }
 
 if (args.size() != 2) {
-   System.err.println("usage: example_validate dataFile shapesFile ")
+   System.err.println("usage: example_validate.groovy dataFile shapesFile ")
    System.exit(1)
 }
 
