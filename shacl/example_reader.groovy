@@ -3,8 +3,8 @@
 @Grab(group='commons-io', module='commons-io', version='2.8.0')
 @Grab(group='org.apache.jena', module='jena-core', version='3.13.1')
 @Grab(group='org.apache.jena', module='jena-tdb', version='3.13.1')
-@Grab(group='org.slf4j', module='slf4j-api', version='1.7.30')
-@Grab(group='org.slf4j', module='slf4j-simple', version='1.7.30')
+@Grab(group='org.slf4j', module='slf4j-api', version='1.7.26')
+@Grab(group='org.slf4j', module='slf4j-simple', version='1.7.26')
 @Grab(group='com.github.jsonld-java', module='jsonld-java', version='0.9.0')
 
 import org.apache.jena.rdf.model.Model
@@ -29,7 +29,7 @@ if (args.size() != 1) {
 inputType  = "TURTLE"
 
 if (args[0].matches('.*\\.ttl$')) {
-    inputType = "TURLTLE"
+    inputType = "TURTLE"
 }
 else if (args[0].matches('.*\\.nt$')) {
     inputType = "NTRIPLES"

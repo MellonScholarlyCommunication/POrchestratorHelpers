@@ -14,8 +14,10 @@ import org.apache.jena.rdf.model.Resource
 import org.apache.jena.rdf.model.ModelFactory
 import org.apache.jena.riot.RDFDataMgr
 import org.apache.jena.riot.RDFFormat
+import org.apache.jena.query.Query
 import org.apache.jena.query.QueryFactory
 import org.apache.jena.query.QueryExecutionFactory
+import org.apache.jena.query.ResultSetFormatter
 import java.io.FileInputStream
 
 def loadModel(fileName, type) {
@@ -32,7 +34,7 @@ if (args.size() != 2) {
 inputType  = "TURTLE"
 
 if (args[0].matches('.*\\.ttl$')) {
-    inputType = "TURLTLE"
+    inputType = "TURTLE"
 }
 else if (args[0].matches('.*\\.nt$')) {
     inputType = "NTRIPLES"
@@ -52,6 +54,32 @@ dataModel  = loadModel(args[0], inputType)
 query = QueryFactory.create(new File(args[1]).getText("UTF-8"))
 
 qexec = QueryExecutionFactory.create( query, dataModel )
-results = qexec.execConstruct()
 
-RDFDataMgr.write(System.out, results, RDFFormat.NQUADS);
+def results = null
+
+if ( Query.QueryTypeConstruct == qexec.getQuery().getQueryType() ) {
+    results = qexec.execConstruct()
+    RDFDataMgr.write(System.out, results, RDFFormat.NQUADS)
+}
+else if (Query.QueryTypeSelect == qexec.getQuery().getQueryType() ) {
+    results = qexec.execSelect()
+    ByteArrayOutputStream b = new ByteArrayOutputStream();
+    ResultSetFormatter.outputAsTSV(b, results);
+    System.out.println(b.toString())
+}
+else if (Query.QueryTypeDescribe == qexec.getQuery().getQueryType() ) {
+    results = qexec.execDescribe()
+    RDFDataMgr.write(System.out, results, RDFFormat.NQUADS)
+}
+else if (Query.QueryTypeAsk == qexec.getQuery().getQueryType() ) {
+    results = qexec.execAsk()
+    System.out.println(results)
+}
+else {
+    System.err.println("Unsupported query type")
+    System.exit(2)
+}
+
+//System.out.println(results)
+
+qexec.close();

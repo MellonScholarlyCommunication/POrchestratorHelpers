@@ -91,10 +91,10 @@ try {
       } as OutputStreamCallback)
   }
   else if (outputDestination == "attribute") {
-      stream = new ByteArrayOutputStream()
-      report.write(stream, FileUtils.langTurtle)
+      bArr = new ByteArrayOutputStream()
+      results.write(bArr, FileUtils.langTurtle)
 
-      flowFile = session.putAttribute(flowFile, "output", new String(stream.toByteArray()))
+      flowFile = session.putAttribute(flowFile, "output", bArr.toString("UTF-8"))
   }
   else {
       // Do nothing

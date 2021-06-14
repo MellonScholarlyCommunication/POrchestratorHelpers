@@ -30,7 +30,7 @@ if (args.size() != 2) {
 inputType  = "TURTLE"
 
 if (args[0].matches('.*\\.ttl$')) {
-    inputType = "TURLTLE"
+    inputType = "TURTLE"
 }
 else if (args[0].matches('.*\\.nt$')) {
     inputType = "NTRIPLES"
