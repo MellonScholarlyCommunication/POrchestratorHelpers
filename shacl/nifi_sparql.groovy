@@ -10,6 +10,7 @@ Optional:
   - Attribute `dataType` with the format of the Flow file (TURTLE,N-TRIPLES,RDF/XML, JSON-LD)
      - See https://jena.apache.org/documentation/io/rdf-input.html
   - Attribute `outputDestination` =  attribute | flowfile (default flowfile)
+  - Attribute `outputAttribute` = name of output attribute (default output)
 
 Output:
   - An updated flowfile with the result of the inference or a new attribute output
@@ -86,6 +87,7 @@ if (!flowFile) return
 outputRelation = REL_SUCCESS
 defaultInputType = "TURTLE"
 defaultOutputDestination = "flowfile"
+defaultOutputAttribute = "output"
 
 try {
   // Read the SPARQL query attribute
@@ -109,6 +111,13 @@ try {
       outputDestination = defaultOutputDestination
   }
 
+  // Read the outputAttribute
+  outputAttribute = flowFile.getAttribute("outputAttribute")
+
+  if (!outputAttribute) {
+      outputAttribute = defaultOutputAttribute
+  }
+
   results = null
 
   // Read/Write the file flowFile
@@ -127,7 +136,7 @@ try {
       } as OutputStreamCallback)
   }
   else if (outputDestination == "attribute") {
-      flowFile = session.putAttribute(flowFile, "output", results)
+      flowFile = session.putAttribute(flowFile, outputAttribute, results)
   }
   else {
       // Do nothing
