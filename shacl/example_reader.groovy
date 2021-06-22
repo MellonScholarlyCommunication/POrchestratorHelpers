@@ -21,12 +21,17 @@ def loadModel(fileName, type) {
     return model;
 }
 
-if (args.size() != 1) {
+if (args.size() < 1) {
    System.err.println("usage: example_reader.groovy dataFile")
    System.exit(1)
 }
 
 inputType  = "TURTLE"
+outputType = "TURTLE"
+
+if (args.size() > 1) {
+    outputType = args[1]
+}
 
 if (args[0].matches('.*\\.ttl$')) {
     inputType = "TURTLE"
@@ -44,7 +49,62 @@ else if (args[0].matches('.\\.rdf$')) {
     inputType = "RDFJSON"
 }
 
+outputFormat = null;
+
+if (outputType == 'TURTLE') {
+    outputFormat = RDFFormat.TURTLE
+}
+else if (outputType == 'NTRIPLES') {
+    outputFormat = RDFFormat.NTRIPLES
+}
+else if (outputType == 'RDFXML') {
+    outputFormat = RDFFormat.RDFXML
+}
+else if (outputType == 'NT') {
+    outputFormat = RDFFormat.NT
+}
+else if (outputType == 'NQ') {
+    outputFormat = RDFFormat.NQ
+}
+else if (outputType == 'TRIG') {
+    outputFormat = RDFFormat.NQ
+}
+else if (outputType == 'JSONLD') {
+    outputFormat = RDFFormat.JSONLD
+}
+else if (outputType == 'JSONLD_COMPACT_FLAT') {
+    outputFormat = RDFFormat.JSONLD_COMPACT_FLAT
+}
+else if (outputType == 'JSONLD_COMPACT_PRETTY') {
+    outputFormat = RDFFormat.JSONLD_COMPACT_PRETTY
+}
+else if (outputType == 'JSONLD_COMPACT_FLAT') {
+    outputFormat = RDFFormat.JSONLD_COMPACT_FLAT
+}
+else if (outputType == 'JSONLD_FLATTEN_PRETTY') {
+    outputFormat = RDFFormat.JSONLD_FLATTEN_PRETTY
+}
+else if (outputType == 'JSONLD_FLATTEN_FLAT') {
+    outputFormat = RDFFormat.JSONLD_FLATTEN_FLAT
+}
+else if (outputType == 'JSONLD_FRAME_PRETTY') {
+    outputFormat = RDFFormat.JSONLD_FRAME_PRETTY
+}
+else if (outputType == 'JSONLD_FRAME_FLAT') {
+    outputFormat = RDFFormat.JSONLD_FRAME_FLAT
+}
+else if (outputType == 'JSONLD_PRETTY') {
+    outputFormat = RDFFormat.JSONLD_PRETTY
+}
+else if (outputType == 'JSONLD_FLAT') {
+    outputFormat = RDFFormat.JSONLD_FLAT
+}
+else {
+    System.err.println("Unknown format")
+    System.exit(2)
+}
+
 dataModel = loadModel(args[0],inputType)
 
 //RDFDataMgr.write(System.out, dataModel, RDFFormat.JSONLD_FLATTEN_PRETTY);
-RDFDataMgr.write(System.out, dataModel, RDFFormat.NQUADS);
+RDFDataMgr.write(System.out, dataModel, outputFormat);
