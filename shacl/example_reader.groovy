@@ -22,7 +22,7 @@ def loadModel(fileName, type) {
 }
 
 if (args.size() < 1) {
-   System.err.println("usage: example_reader.groovy dataFile")
+   System.err.println("usage: example_reader.groovy dataFile [outputType]")
    System.exit(1)
 }
 

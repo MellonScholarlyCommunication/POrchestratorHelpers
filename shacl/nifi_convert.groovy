@@ -32,6 +32,66 @@ def loadModel(inputStream, type) {
     return model;
 }
 
+def string2format(format)  {
+    if (!format) {
+        return null
+    }
+    if (format == 'TURTLE') {
+        return RDFFormat.TURTLE
+    }
+    else if (format == 'NTRIPLES') {
+        return RDFFormat.NTRIPLES
+    }
+    else if (format == 'RDFXML') {
+        return RDFFormat.RDFXML
+    }
+    else if (format == 'NT') {
+        return RDFFormat.NT
+    }
+    else if (format == 'NQ') {
+        return RDFFormat.NQ
+    }
+    else if (format == 'TRIG') {
+        return RDFFormat.NQ
+    }
+    else if (format == 'JSON') {
+        return RDFFormat.JSONLD_COMPACT_PRETTY
+    }
+    else if (format == 'JSONLD') {
+        return RDFFormat.JSONLD
+    }
+    else if (format == 'JSONLD_COMPACT_FLAT') {
+        return RDFFormat.JSONLD_COMPACT_FLAT
+    }
+    else if (format == 'JSONLD_COMPACT_PRETTY') {
+        return RDFFormat.JSONLD_COMPACT_PRETTY
+    }
+    else if (format == 'JSONLD_COMPACT_FLAT') {
+        return RDFFormat.JSONLD_COMPACT_FLAT
+    }
+    else if (format == 'JSONLD_FLATTEN_PRETTY') {
+        return RDFFormat.JSONLD_FLATTEN_PRETTY
+    }
+    else if (format == 'JSONLD_FLATTEN_FLAT') {
+        return RDFFormat.JSONLD_FLATTEN_FLAT
+    }
+    else if (format == 'JSONLD_FRAME_PRETTY') {
+        return RDFFormat.JSONLD_FRAME_PRETTY
+    }
+    else if (format == 'JSONLD_FRAME_FLAT') {
+        return RDFFormat.JSONLD_FRAME_FLAT
+    }
+    else if (format == 'JSONLD_PRETTY') {
+        return RDFFormat.JSONLD_PRETTY
+    }
+    else if (format == 'JSONLD_FLAT') {
+        return RDFFormat.JSONLD_FLAT
+    }
+    else {
+        return null;
+    }
+}
+
 flowFile = session.get()
 
 if (!flowFile) return
@@ -55,62 +115,11 @@ try {
         outputType = defaultOutputType
     }
 
-    outputFormat = null;
-
-    if (outputType == 'TURTLE') {
-        outputFormat = RDFFormat.TURTLE
-    }
-    else if (outputType == 'NTRIPLES') {
-        outputFormat = RDFFormat.NTRIPLES
-    }
-    else if (outputType == 'RDFXML') {
-        outputFormat = RDFFormat.RDFXML
-    }
-    else if (outputType == 'NT') {
-        outputFormat = RDFFormat.NT
-    }
-    else if (outputType == 'NQ') {
-        outputFormat = RDFFormat.NQ
-    }
-    else if (outputType == 'TRIG') {
-        outputFormat = RDFFormat.NQ
-    }
-    else if (outputType == 'JSONLD') {
-        outputFormat = RDFFormat.JSONLD
-    }
-    else if (outputType == 'JSONLD_COMPACT_FLAT') {
-        outputFormat = RDFFormat.JSONLD_COMPACT_FLAT
-    }
-    else if (outputType == 'JSONLD_COMPACT_PRETTY') {
-        outputFormat = RDFFormat.JSONLD_COMPACT_PRETTY
-    }
-    else if (outputType == 'JSONLD_COMPACT_FLAT') {
-        outputFormat = RDFFormat.JSONLD_COMPACT_FLAT
-    }
-    else if (outputType == 'JSONLD_FLATTEN_PRETTY') {
-        outputFormat = RDFFormat.JSONLD_FLATTEN_PRETTY
-    }
-    else if (outputType == 'JSONLD_FLATTEN_FLAT') {
-        outputFormat = RDFFormat.JSONLD_FLATTEN_FLAT
-    }
-    else if (outputType == 'JSONLD_FRAME_PRETTY') {
-        outputFormat = RDFFormat.JSONLD_FRAME_PRETTY
-    }
-    else if (outputType == 'JSONLD_FRAME_FLAT') {
-        outputFormat = RDFFormat.JSONLD_FRAME_FLAT
-    }
-    else if (outputType == 'JSONLD_PRETTY') {
-        outputFormat = RDFFormat.JSONLD_PRETTY
-    }
-    else if (outputType == 'JSONLD_FLAT') {
-        outputFormat = RDFFormat.JSONLD_FLAT
-    }
-
     // Read/Write the file flowFile
     session.write(flowFile , { inputStream , outputStream ->
         dataModel = loadModel(inputStream, inputType)
 
-        RDFDataMgr.write(outputStream, dataModel, outputFormat);
+        RDFDataMgr.write(outputStream, dataModel, string2format(outputType));
     } as StreamCallback)
 }
 catch(e) {
