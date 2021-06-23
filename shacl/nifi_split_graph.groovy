@@ -1,3 +1,25 @@
+/*
+
+Split a flow file based on a graph pattern
+
+Required:
+  - Flow file with TURTLE, RDF/XML, JSON-LD,...
+  - Attribute `id` with a subject IRI
+  - Attribute `predicate` with a predicate IRI
+
+Optional:
+  - Attribute `inputType` with the format of the Flow file (TURTLE,N-TRIPLES,RDF/XML, JSON-LD)
+     - See https://jena.apache.org/documentation/io/rdf-input.html
+  - Attribute `inputSource` with "flowfile" or an attribute containing the graph
+  - Attribite `outputType` with the name of a serialization
+
+Output:
+  - For search ?subject ?preficate pattern a new flow file with the fragment graph
+  - At error an attribute `error` with values:
+      - VALIDATION_ERROR : when the input is not valid
+      - PROCESS_ERROR : when the flow file or shape file can't be processed for some reason
+      - An `errorMessage` with the reason
+*/
 @Grab(group='commons-io', module='commons-io', version='2.8.0')
 @Grab(group='org.apache.jena', module='jena-core', version='3.13.1')
 @Grab(group='org.apache.jena', module='jena-tdb', version='3.13.1')
@@ -109,8 +131,6 @@ defaultInputType = "TURTLE"
 defaultInputSource = "flowfile"
 
 def splitFlowFiles = new ArrayList<>();
-
-log.info("Here<<<<")
 
 try {
     // Read the id attribute
