@@ -38,7 +38,12 @@ let compareDate = function (f1, f2) {
 }
 
 fs.readdirSync(inbox).sort(compareDate).forEach( (f,_) => {
-    container['contains'].push(`${id}/${f}`);
+    if (f.startsWith('.')) {
+        // ignore
+    }
+    else {
+        container['contains'].push(`${id}/${f}`);
+    }
 });
 
 console.log(JSON.stringify(container));
