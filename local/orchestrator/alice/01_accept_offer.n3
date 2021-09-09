@@ -1,0 +1,30 @@
+# Send an Accept when we get an offer
+
+PREFIX ex:   <http://example.org/>
+PREFIX as:   <https://www.w3.org/ns/activitystreams#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX pol:  <https://www.example.org/ns/policy#>
+PREFIX fno:  <https://w3id.org/function/ontology#>
+
+{
+  [ ex:TopGraph ?id ] .
+  ?id a as:Offer .
+
+  ?id as:origin ?origin .
+  ?id as:target ?target .
+}
+=>
+{
+  [ pol:policy [
+      a fno:Execution ;
+      fno:executes ex:sendNotification ;
+      ex:notification [
+        a as:Accept ;
+        as:inReplyTo ?id ;
+        as:object ?id ;
+        as:target ?origin ;
+        as:origin ?target  
+      ]
+    ]
+  ].
+}.
