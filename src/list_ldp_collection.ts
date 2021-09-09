@@ -1,18 +1,18 @@
 import * as fs from "fs";
 
 if (process.argv.length != 4) {
-    console.log(`usage: ${process.argv[1]} id inbox`);
+    console.log(`usage: ${process.argv[1]} id collection`);
     process.exit(1);
 }
 
 let id    = process.argv[2];
-let inbox = process.argv[3];
+let collection = process.argv[3];
 
 id = id.replace(/\/$/,"");
 
-fs.access(inbox, fs.constants.R_OK, (err) => {
+fs.access(collection, fs.constants.R_OK, (err) => {
     if (err) {
-      console.log(`${inbox} doesn't exist`);
+      console.log(`${collection} doesn't exist`);
       process.exit(2);
     }
 } );
@@ -24,14 +24,8 @@ container['@id'] = id;
 container['contains'] = [];
 
 let compareDate = function (f1, f2) {
-    let fd1 = fs.openSync(`${inbox}/${f1}`,'r');
-    let fd2 = fs.openSync(`${inbox}/${f2}`,'r');
-
-    let m1 = fs.fstatSync(fd1).mtime;
-    let m2 = fs.fstatSync(fd2).mtime;
-
-    fs.closeSync(fd1);
-    fs.closeSync(fd2);
+    let m1 = fs.statSync(`${collection}/${f1}`).mtime;
+    let m2 = fs.statSync(`${collection}/${f2}`).mtime;
 
     if (m1 < m2) { return 1 }
     if (m1 > m2) { return -1 }
@@ -39,7 +33,7 @@ let compareDate = function (f1, f2) {
     return 0;
 }
 
-fs.readdirSync(inbox).sort(compareDate).forEach( (f,_) => {
+fs.readdirSync(collection).sort(compareDate).forEach( (f,_) => {
     if (f.startsWith('.')) {
         // ignore
     }
