@@ -8,6 +8,8 @@ if (process.argv.length != 4) {
 let id    = process.argv[2];
 let inbox = process.argv[3];
 
+id = id.replace(/\/$/,"");
+
 fs.access(inbox, fs.constants.R_OK, (err) => {
     if (err) {
       console.log(`${inbox} doesn't exist`);
