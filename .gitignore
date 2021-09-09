@@ -1,4 +1,7 @@
 node_modules/**
 js/**
-local/**
+local/cache/**
+local/ldn-sender/**
+local/*/*/inbox
+local/*/*/events
 orchestrator
