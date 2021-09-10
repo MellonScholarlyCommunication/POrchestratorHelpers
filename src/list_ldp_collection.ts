@@ -5,23 +5,36 @@ if (process.argv.length != 4) {
     process.exit(1);
 }
 
-let id    = process.argv[2];
+let id         = process.argv[2];
 let collection = process.argv[3];
 
 id = id.replace(/\/$/,"");
 
-fs.access(collection, fs.constants.R_OK, (err) => {
-    if (err) {
-      console.log(`${collection} doesn't exist`);
-      process.exit(2);
-    }
-} );
+let modified : string;
+
+try {
+    let stat    = fs.statSync(collection);
+    modified    =  new Date(stat.mtime).toISOString();
+}
+catch(err) {
+    console.log(`${collection} doesn't exist`);
+    process.exit(2);
+}
 
 let container = {};
 
-container['@context'] =  "http://www.w3.org/ns/ldp";
-container['@id'] = id;
+container['@context'] =  [
+    "http://www.w3.org/ns/ldp" ,
+    { "modified": {
+      "@id": "http://purl.org/dc/terms/modified",
+      "@type": "http://www.w3.org/2001/XMLSchema#dateTime"
+      }
+    }
+];
+container['id'] = id;
+container['type'] = [ 'BasicContainer' , 'Container' ];
 container['contains'] = [];
+container['modified'] = modified;
 
 let compareDate = function (f1, f2) {
     let m1 = fs.statSync(`${collection}/${f1}`).mtime;
@@ -38,7 +51,17 @@ fs.readdirSync(collection).sort(compareDate).forEach( (f,_) => {
         // ignore
     }
     else {
-        container['contains'].push(`${id}/${f}`);
+        let stat = fs.statSync(`${collection}/${f}`);
+        let type = stat.isDirectory() ? 
+                    [ "BasicContainer" , "Container" , "Resource"] :
+                    [ "Resource"];
+        let modified = new Date(stat.mtime).toISOString();
+        let resource = {
+            "id" : `${id}/${f}` ,
+            "type": type ,
+            "modified": modified
+        };
+        container['contains'].push(resource);
     }
 });
 
