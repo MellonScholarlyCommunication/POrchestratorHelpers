@@ -5,7 +5,7 @@ if (process.argv.length < 3) {
     process.exit(1);
 }
 
-let node = process.argv[2];
+let node     = process.argv[2];
 let keepLast = process.argv[3] ? 
                     parseInt(process.argv[3]) : null;
 
