@@ -4,7 +4,7 @@ Split a flow file based on a graph pattern
 
 Required:
   - Flow file with TURTLE, RDF/XML, JSON-LD,...
-  - Attribute `id` with a subject IRI
+  - Attribute `subject` with a subject IRI
   - Attribute `predicate` with a predicate IRI
 
 Optional:
@@ -69,13 +69,16 @@ def string2format(format)  {
     else if (format == 'JSON') {
         return RDFFormat.JSONLD_COMPACT_PRETTY
     }
+    else if (format == 'JSON-LD') {
+        return RDFFormat.JSONLD
+    }
     else if (format == 'JSONLD') {
         return RDFFormat.JSONLD
     }
     else if (format == 'JSONLD_COMPACT_FLAT') {
         return RDFFormat.JSONLD_COMPACT_FLAT
     }
-      else if (format == 'JSONLD_COMPACT_PRETTY') {
+    else if (format == 'JSONLD_COMPACT_PRETTY') {
         return RDFFormat.JSONLD_COMPACT_PRETTY
     }
     else if (format == 'JSONLD_COMPACT_FLAT') {
@@ -134,7 +137,7 @@ def splitFlowFiles = new ArrayList<>();
 
 try {
     // Read the id attribute
-    def subjectIri = flowFile.getAttribute("id")
+    def subjectIri = flowFile.getAttribute("subject")
 
     if (!subjectIri) {
         return
