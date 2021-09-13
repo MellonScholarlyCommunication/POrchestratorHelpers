@@ -11,18 +11,24 @@ let keepLast = process.argv[3] ?
 
 clearAllSync(node, keepLast);
 
+function isDirectory(path: string) : boolean {
+    try {
+        fs.statSync(path);
+        return true;
+    }
+    catch (e) {
+        return false;
+    }   
+}
+
 function clearAllSync(node :string, keepLast? :number) : void {
     let directory = `local/${node}`;
 
-    try {
-        let stat = fs.statSync(directory);
-    
-        if (! stat.isDirectory() ) {
-            console.error(`no such directory - ${directory}`);
-            process.exit(2);
-        }
+    if (isDirectory(directory)) {
+        // We are ok
+     
     }
-    catch (e) {
+    else {
         console.error(`no such directory - ${directory}`);
         process.exit(2);
     }
@@ -40,6 +46,9 @@ function clearAllSync(node :string, keepLast? :number) : void {
 }
 
 function cleanDirectorySync(dir: string) : void {
+    if (! isDirectory(dir)) {
+        return;
+    }
     fs.readdirSync(dir).forEach( (f,_) => {
         if (! f.startsWith(".")) {
             console.log(`[-] ${dir}/${f}`);
@@ -49,6 +58,9 @@ function cleanDirectorySync(dir: string) : void {
 }
 
 function cleanDirectoryKeepSync(dir: string, keepLast: number) : void {
+    if (! isDirectory(dir)) {
+        return;
+    }
     let compareDate = function (f1, f2) {
         let m1 = fs.statSync(`${dir}/${f1}`).mtime;
         let m2 = fs.statSync(`${dir}/${f2}`).mtime;
