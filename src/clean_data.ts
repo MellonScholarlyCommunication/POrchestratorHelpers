@@ -30,10 +30,12 @@ function clearAllSync(node :string, keepLast? :number) : void {
     fs.readdirSync(directory).forEach( (node,_) => {
         if (keepLast) {
             cleanDirectoryKeepSync(`${directory}/${node}/inbox`,keepLast);
+            cleanDirectoryKeepSync(`${directory}/${node}/outbox`,keepLast);
             cleanDirectoryKeepSync(`${directory}/${node}/events`,keepLast);
         }
         else {
             cleanDirectorySync(`${directory}/${node}/inbox`);
+            cleanDirectorySync(`${directory}/${node}/outbox`);
             cleanDirectorySync(`${directory}/${node}/events`);
         }
     });
