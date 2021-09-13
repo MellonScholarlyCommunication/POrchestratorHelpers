@@ -5,3 +5,4 @@ local/ldn-sender/**
 local/*/*/inbox
 local/*/*/events
 orchestrator
+package-lock.json
