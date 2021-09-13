@@ -1,10 +1,8 @@
 @prefix : <#>.
-@prefix ldp: <http://www.w3.org/ns/ldp#>.
-@prefix foaf: <http://xmlns.com/foaf/0.1/>.
-@prefix mellon: <http://mellonproject.org/>.
+@prefix as: <http://www.w3.org/ns/acticitystreams#>.
 
 :me 
-    foaf:name "Bob" ;
-    ldp:inbox </inbox> ;
-    mellon:eventlog </events>.
+    as:name   "Bob" ;
+    as:inbox  </inbox> ;
+    as:outbox </events>.
  
