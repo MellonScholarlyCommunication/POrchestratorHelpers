@@ -1,9 +1,9 @@
-.PHONY: prod dev compile
+.PHONY: prod-rules dev-rules compile
 
-compile:
+js:
 	tsc
 
-prod:
+prod-rules:
 	for f in n3/*.n3; do \
 		S=$$(echo $$f | sed -e 's/n3\//local\/orchestrator\/alice\//'); \
 		echo "$$f > $$S" ; \
@@ -15,7 +15,7 @@ prod:
 		npm exec mustache etc/bob-prod.json $$f > $$S ; \
 	done
 
-dev:
+dev-rules:
 	for f in n3/*.n3; do \
 		S=$$(echo $$f | sed -e 's/n3\//local\/orchestrator\/alice\//'); \
 		echo "$$f > $$S" ; \

@@ -1,0 +1,8 @@
+@prefix : <#>.
+@prefix as: <http://www.w3.org/ns/activitystreams#>.
+
+:me 
+    a         as:Person;
+    as:name   "registration" ;
+    as:inbox  </inbox> ;
+    as:outbox </events>.
