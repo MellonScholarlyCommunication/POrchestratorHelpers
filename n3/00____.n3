@@ -1,7 +1,7 @@
 # Some logic to decide what is the main notification identifier
 # It is that part that is a "Class" not the subject of something else
 
-PREFIX ex:   <http://example.org/>
+PREFIX ex:   <https://www.example.org/>
 PREFIX as:   <https://www.w3.org/ns/activitystreams#>
 PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX log:  <http://www.w3.org/2000/10/swap/log#>
