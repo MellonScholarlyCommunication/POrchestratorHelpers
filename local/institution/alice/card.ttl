@@ -1,9 +1,10 @@
 @prefix : <#>.
 @prefix as: <http://www.w3.org/ns/activitystreams#>.
+@prefix ex: <https://www.example.org/>.
 
 :me 
     a         as:Person;
-    as:name   "Alice" ;
+    as:name   "alice" ;
     as:inbox  </inbox> ;
-    as:outbox </events>.
- 
+    as:outbox </events> ;
+    ex:orchestrator </o_alice/card.ttl#me> .

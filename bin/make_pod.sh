@@ -19,12 +19,14 @@ touch ${BASE}/${ORG}/${NAME}/events/.gitignore
 cat > ${BASE}/${ORG}/${NAME}/card.ttl <<EOF
 @prefix : <#>.
 @prefix as: <http://www.w3.org/ns/activitystreams#>.
+@prefix ex: <https://www.example.org/>.
 
 :me 
     a         as:Person;
     as:name   "${NAME}" ;
     as:inbox  </inbox> ;
-    as:outbox </events>.
+    as:outbox </events> ;
+    ex:orchestrator </o_${NAME}/card.ttl#me> .
 EOF
 
 # Make the orchestrator inbox
