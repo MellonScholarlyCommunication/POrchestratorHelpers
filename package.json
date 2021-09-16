@@ -3,6 +3,7 @@
     "@types/node": "^14.14.37"
   },
   "dependencies": {
+    "mimetype": "^0.0.8",
     "mustache": "^4.2.0"
   }
 }
