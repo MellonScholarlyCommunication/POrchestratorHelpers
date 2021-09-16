@@ -1,0 +1,5 @@
+{
+    "cardUrl" : "http://157.193.231.95/institution/alice/card.ttl#",
+    "output" : "local/orchestrator/registration" ,
+    "input"   : ["n3","n3/registration"] 
+}

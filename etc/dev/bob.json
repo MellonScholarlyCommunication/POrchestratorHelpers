@@ -1,0 +1,5 @@
+{
+    "cardUrl" : "http://127.0.0.1:2000/bob/card.ttl#",
+    "output" : "local/orchestrator/bob" ,
+    "input"   : ["n3"] 
+}
