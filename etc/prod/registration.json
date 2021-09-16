@@ -1,5 +1,6 @@
 {
-    "cardUrl" : "http://157.193.231.95/institution/alice/card.ttl#",
-    "output" : "local/orchestrator/registration" ,
-    "input"   : ["n3","n3/registration"] 
+    "me"           : "http://157.193.231.95/institution/alice/card.ttl#",
+    "orchestrator" : "http://157.193.231.95/institution/o_registration/inbox",
+    "output"       : "local/orchestrator/registration" ,
+    "input"        : ["n3","n3/registration"] 
 }

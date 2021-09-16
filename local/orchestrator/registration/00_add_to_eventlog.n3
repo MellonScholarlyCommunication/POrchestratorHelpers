@@ -1,0 +1,22 @@
+# Add to the EventLog
+
+PREFIX ex:   <https://www.example.org/>
+PREFIX as:   <https://www.w3.org/ns/activitystreams#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX pol:  <https://www.example.org/ns/policy#>
+PREFIX fno:  <https://w3id.org/function/ontology#>
+PREFIX list: <http://www.w3.org/2000/10/swap/list#>
+
+{
+  [ ex:TopGraph ?id ] .
+  ?id a ?class .
+  ?class list:in (as:Accept as:Reject as:Announce as:Offer) .
+}
+=>
+{
+  [ pol:policy [
+      a fno:Execution ;
+      fno:executes ex:appendToLog ;
+      ex:notification ?id
+  ] ]
+}.

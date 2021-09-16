@@ -1,5 +1,6 @@
 {
-    "cardUrl" : "http://127.0.0.1:2000/registration/card.ttl#",
-    "output" : "local/orchestrator/registration" ,
-    "input"   : ["n3","n3/registration"] 
+    "me"           : "http://127.0.0.1:2000/registration/card.ttl#",
+    "orchestrator" : "http://127.0.0.1:2000/o_registration/inbox",
+    "output"       : "local/orchestrator/registration" ,
+    "input"        : ["n3","n3/registration"] 
 }

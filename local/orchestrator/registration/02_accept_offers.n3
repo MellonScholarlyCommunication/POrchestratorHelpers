@@ -1,31 +1,42 @@
-# Send an forward messages to external boxes
+# Send an Accept when we get an offer
 
-PREFIX :     <{{{me}}}>
+PREFIX :     <http://127.0.0.1:2000/registration/card.ttl#>
+PREFIX orchestrator: <http://127.0.0.1:2000/o_registration/inbox>
 PREFIX ex:   <https://www.example.org/>
 PREFIX as:   <https://www.w3.org/ns/activitystreams#>
 PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX pol:  <https://www.example.org/ns/policy#>
 PREFIX fno:  <https://w3id.org/function/ontology#>
 PREFIX log:  <http://www.w3.org/2000/10/swap/log#>
+PREFIX list: <http://www.w3.org/2000/10/swap/list#>
 
 {
   [ ex:TopGraph ?id ] .
+  ?id a ?class .
+  ?class list:in (as:Offer) .
 
   ?id as:actor ?actor .
   ?id as:target ?target .
 
   # Forward messages from myself to the target
-  ?actor log:equalTo :me.
+  ?actor log:notEqualTo :me.
 
   # Don't forward messages to myself
-  ?target log:notEqualTo :me.
+  ?target log:equalTo :me.
 }
 =>
 {
   [ pol:policy [
       a fno:Execution ;
       fno:executes ex:sendNotification ;
-      ex:notification ?id
+      ex:notification [
+            a as:Accept ;
+            as:inReplyTo ?id ;
+            as:actor     :me ;
+            as:origin    orchestrator: ;
+            as:target    ?actor;
+            as:object    ?object
+      ]
     ]
   ].
 }.
