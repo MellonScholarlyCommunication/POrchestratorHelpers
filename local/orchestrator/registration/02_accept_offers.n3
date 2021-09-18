@@ -1,7 +1,7 @@
 # Send an Accept when we get an offer
 
-PREFIX :     <http://127.0.0.1:2000/registration/card.ttl#>
-PREFIX orchestrator: <http://127.0.0.1:2000/o_registration/inbox>
+PREFIX :     <http://157.193.231.95/institution/registration/card.ttl#>
+PREFIX orchestrator: <http://157.193.231.95/institution/o_registration/inbox>
 PREFIX ex:   <https://www.example.org/>
 PREFIX as:   <https://www.w3.org/ns/activitystreams#>
 PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>

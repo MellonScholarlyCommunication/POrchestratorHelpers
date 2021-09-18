@@ -2,6 +2,6 @@
 @prefix as: <http://www.w3.org/ns/activitystreams#>.
 
 :me 
-    a         as:Service 
+    a         as:Service ;
     as:name   "Orchestrator" ;
-    as:inbox  </inbox> .
+    as:inbox  <inbox> .

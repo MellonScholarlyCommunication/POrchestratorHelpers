@@ -1,6 +1,6 @@
 # Send an forward messages to external boxes
 
-PREFIX :     <http://127.0.0.1:2000/registration/card.ttl#>
+PREFIX :     <http://157.193.231.95/institution/registration/card.ttl#>
 PREFIX ex:   <https://www.example.org/>
 PREFIX as:   <https://www.w3.org/ns/activitystreams#>
 PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
