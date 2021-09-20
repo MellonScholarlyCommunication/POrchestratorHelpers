@@ -14,10 +14,10 @@ PREFIX log:  <http://www.w3.org/2000/10/swap/log#>
   ?id as:actor ?actor .
   ?id as:target ?target .
 
-  # Forward messages from myself to the target
+  # Only react to forwarding messages sent by myself... 
   ?actor log:equalTo me: .
 
-  # Don't forward messages to myself
+  # Don't foward messages to myself...
   ?target log:notEqualTo me: .
 }
 =>

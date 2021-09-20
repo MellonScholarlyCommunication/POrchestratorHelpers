@@ -21,14 +21,16 @@ PREFIX list: <http://www.w3.org/2000/10/swap/list#>
   ?id as:actor ?actor .
   ?id as:target ?target .
 
-  # Forward messages from myself to the target
+  # I don't react to my own messages...
   ?actor log:notEqualTo me: .
 
-  # Don't forward messages to myself
+  # The offer should be sent to myself...
   ?target log:equalTo me: .
 }
 =>
 {
+  # Send a noitification to my own inbox, so that it can be picked up
+  # by the forwarding rules and event log processing
   [ pol:policy [
       a fno:Execution ;
       fno:executes ex:sendInbox ;
