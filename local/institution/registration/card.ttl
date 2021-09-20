@@ -3,8 +3,8 @@
 @prefix ex: <https://www.example.org/>.
 
 :me 
-    a         as:Person;
+    a         as:Person ;
     as:name   "registration" ;
-    as:inbox  </inbox> ;
-    as:outbox </events> ;
-    ex:orchestrator </o_registration/card.ttl#me> .
+    as:inbox  <inbox> ;
+    as:outbox <events> ;
+    ex:orchestrator <../o_registration/card.ttl#me> .

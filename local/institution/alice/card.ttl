@@ -5,6 +5,6 @@
 :me 
     a         as:Person;
     as:name   "alice" ;
-    as:inbox  </inbox> ;
-    as:outbox </events> ;
-    ex:orchestrator </o_alice/card.ttl#me> .
+    as:inbox  <inbox> ;
+    as:outbox <events> ;
+    ex:orchestrator <../o_alice/card.ttl#me> .

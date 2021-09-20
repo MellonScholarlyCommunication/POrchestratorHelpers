@@ -22,11 +22,11 @@ cat > ${BASE}/${ORG}/${NAME}/card.ttl <<EOF
 @prefix ex: <https://www.example.org/>.
 
 :me 
-    a         as:Person;
+    a         as:Person ;
     as:name   "${NAME}" ;
-    as:inbox  </inbox> ;
-    as:outbox </events> ;
-    ex:orchestrator </o_${NAME}/card.ttl#me> .
+    as:inbox  <inbox> ;
+    as:outbox <events> ;
+    ex:orchestrator <../o_${NAME}/card.ttl#me> .
 EOF
 
 # Make the orchestrator inbox
@@ -39,9 +39,9 @@ cat > ${BASE}/${ORG}/o_${NAME}/card.ttl <<EOF
 @prefix as: <http://www.w3.org/ns/activitystreams#>.
 
 :me 
-    a         as:Service 
+    a         as:Service ;
     as:name   "Orchestrator" ;
-    as:inbox  </inbox> .
+    as:inbox  <inbox> .
 EOF
 
 # Make the orchestrator rules
