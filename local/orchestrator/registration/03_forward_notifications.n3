@@ -1,6 +1,6 @@
 # Send an forward messages to external boxes
 
-PREFIX :     <http://127.0.0.1:2000/registration/card.ttl#>
+PREFIX me:     <http://127.0.0.1:2000/registration/card.ttl#me>
 PREFIX ex:   <https://www.example.org/>
 PREFIX as:   <https://www.w3.org/ns/activitystreams#>
 PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -15,16 +15,16 @@ PREFIX log:  <http://www.w3.org/2000/10/swap/log#>
   ?id as:target ?target .
 
   # Forward messages from myself to the target
-  ?actor log:equalTo :me.
+  ?actor log:equalTo me: .
 
   # Don't forward messages to myself
-  ?target log:notEqualTo :me.
+  ?target log:notEqualTo me: .
 }
 =>
 {
   [ pol:policy [
       a fno:Execution ;
-      fno:executes ex:sendNotification ;
+      fno:executes ex:sendOutbox ;
       ex:notification ?id
     ]
   ].

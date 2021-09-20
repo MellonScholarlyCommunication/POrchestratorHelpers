@@ -1,6 +1,10 @@
 {
-    "me"           : "http://127.0.0.1:2000/registration/card.ttl#",
-    "orchestrator" : "http://127.0.0.1:2000/o_registration/inbox",
+    "me"        : "http://127.0.0.1:2000/registration/card.ttl#me",
+    "orchestrator" : {
+        "id"    : "http://localhost:2000/o_registration/card.ttl#me",
+        "type"  : "https://www.w3.org/ns/activitystreams#Service",
+        "inbox" : "http://localhost:2000/o_registration/inbox"
+    },
     "output"       : "local/orchestrator/registration" ,
     "input"        : ["n3","n3/registration"] 
 }

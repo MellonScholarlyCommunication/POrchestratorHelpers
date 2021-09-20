@@ -1,5 +1,5 @@
 {
-    "me"      : "http://127.0.0.1:2000/alice/card.ttl#",
+    "me"      : "http://127.0.0.1:2000/alice/card.ttl#me",
     "output"  : "local/orchestrator/alice" ,
     "input"   : ["n3"] 
 }

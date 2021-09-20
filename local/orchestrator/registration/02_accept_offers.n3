@@ -1,14 +1,17 @@
 # Send an Accept when we get an offer
 
-PREFIX :     <http://127.0.0.1:2000/registration/card.ttl#>
-PREFIX orchestrator: <http://127.0.0.1:2000/o_registration/inbox>
+PREFIX me:   <http://127.0.0.1:2000/registration/card.ttl#me>
 PREFIX ex:   <https://www.example.org/>
 PREFIX as:   <https://www.w3.org/ns/activitystreams#>
+PREFIX ldp:  <http://www.w3.org/ns/ldp#>
 PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX pol:  <https://www.example.org/ns/policy#>
 PREFIX fno:  <https://w3id.org/function/ontology#>
 PREFIX log:  <http://www.w3.org/2000/10/swap/log#>
 PREFIX list: <http://www.w3.org/2000/10/swap/list#>
+
+<http://localhost:2000/o_registration/card.ttl#me> a <https://www.w3.org/ns/activitystreams#Service> .
+<http://localhost:2000/o_registration/card.ttl#me> ldp:inbox <http://localhost:2000/o_registration/inbox> .
 
 {
   [ ex:TopGraph ?id ] .
@@ -19,21 +22,21 @@ PREFIX list: <http://www.w3.org/2000/10/swap/list#>
   ?id as:target ?target .
 
   # Forward messages from myself to the target
-  ?actor log:notEqualTo :me.
+  ?actor log:notEqualTo me: .
 
   # Don't forward messages to myself
-  ?target log:equalTo :me.
+  ?target log:equalTo me: .
 }
 =>
 {
   [ pol:policy [
       a fno:Execution ;
-      fno:executes ex:sendNotification ;
+      fno:executes ex:sendInbox ;
       ex:notification [
             a as:Accept ;
             as:inReplyTo ?id ;
-            as:actor     :me ;
-            as:origin    orchestrator: ;
+            as:actor     me: ;
+            as:origin    <http://localhost:2000/o_registration/card.ttl#me> ;
             as:target    ?actor;
             as:object    ?id 
       ]
