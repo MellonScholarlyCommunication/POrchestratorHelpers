@@ -40,7 +40,7 @@ cat > ${BASE}/${ORG}/o_${NAME}/card.ttl <<EOF
 
 :me 
     a         as:Service ;
-    as:name   "Orchestrator" ;
+    as:name   "${NAME}'s orchestrator" ;
     as:inbox  <inbox> .
 EOF
 

@@ -3,6 +3,8 @@
     "@types/node": "^14.14.37"
   },
   "dependencies": {
+    "@comunica/actor-init-sparql": "^1.22.0",
+    "@comunica/actor-init-sparql-file": "^1.22.0",
     "mimetype": "^0.0.8",
     "mustache": "^4.2.0"
   }
