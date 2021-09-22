@@ -6,6 +6,7 @@
     "@comunica/actor-init-sparql": "^1.22.0",
     "@comunica/actor-init-sparql-file": "^1.22.0",
     "mimetype": "^0.0.8",
-    "mustache": "^4.2.0"
+    "mustache": "^4.2.0",
+    "n3": "^1.11.1"
   }
 }
