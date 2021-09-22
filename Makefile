@@ -1,9 +1,9 @@
-.PHONY: compile n3 registry clean
+.PHONY: compile rules registry clean
 
 compile:
 	tsc
 
-n3:
+rules:
 	bin/make_rules.sh
 
 registry:
