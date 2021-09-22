@@ -30,7 +30,7 @@ listInboxes(mySource).then ( ids => {
         writer.addQuad(
             namedNode('#me'),
             namedNode(ns.foaf('knows')),
-            namedNode(id)
+            namedNode(`${id}/card.ttl#me`)
         );
     });
     writer.end ( (error,result) => {
@@ -41,7 +41,8 @@ listInboxes(mySource).then ( ids => {
 async function listInboxes(source: string) : Promise<string[]> {
     const boxes = await queryBinding(source,`
         SELECT ?box WHERE {
-            ?ldp <http://www.w3.org/ns/ldp#contains> ?box
+            ?ldp <http://www.w3.org/ns/ldp#contains> ?box .
+            ?box a <http://www.w3.org/ns/ldp#Container> .
         }
     `);
 
