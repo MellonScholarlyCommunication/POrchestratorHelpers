@@ -2,5 +2,5 @@
 @prefix schema: <http://schema.org/>.
 
 <#me> <http://www.w3.org/1999/02/22-rdf-syntax-ns#a> foaf:Agent, schema:Service;
-    foaf:knows <http://localhost:2000/o_bob/card.ttl#me>, <http://localhost:2000/o_registration/card.ttl#me>, <http://localhost:2000/registration/card.ttl#me>, <http://localhost:2000/bob/card.ttl#me>, <http://localhost:2000/o_alice/card.ttl#me>, <http://localhost:2000/alice/card.ttl#me>.
+    foaf:knows <http://localhost:2000/registration/card.ttl#me>, <http://localhost:2000/bob/card.ttl#me>, <http://localhost:2000/alice/card.ttl#me>, <http://localhost:2000/o_bob/card.ttl#me>, <http://localhost:2000/o_registration/card.ttl#me>, <http://localhost:2000/o_alice/card.ttl#me>.
 

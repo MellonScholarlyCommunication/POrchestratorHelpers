@@ -12,9 +12,11 @@ fi
 # Make the LDP environment
 mkdir -p ${BASE}/${ORG}/${NAME}/inbox
 mkdir -p ${BASE}/${ORG}/${NAME}/events
+mkdir -p ${BASE}/${ORG}/${NAME}/artefacts
 
 touch ${BASE}/${ORG}/${NAME}/inbox/.gitignore
 touch ${BASE}/${ORG}/${NAME}/events/.gitignore
+touch ${BASE}/${ORG}/${NAME}/artefacts/.gitignore
 
 cat > ${BASE}/${ORG}/${NAME}/card.ttl <<EOF
 @prefix : <#>.
@@ -26,6 +28,7 @@ cat > ${BASE}/${ORG}/${NAME}/card.ttl <<EOF
     as:name   "${NAME}" ;
     as:inbox  <inbox> ;
     as:outbox <events> ;
+    ex:artefacts <artefacts> ;
     ex:orchestrator <../o_${NAME}/card.ttl#me> .
 EOF
 

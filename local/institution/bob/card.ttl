@@ -3,8 +3,9 @@
 @prefix ex: <https://www.example.org/>.
 
 :me 
-    a         as:Person;
+    a         as:Person ;
     as:name   "bob" ;
     as:inbox  <inbox> ;
     as:outbox <events> ;
+    ex:artefacts <artefacts> ;
     ex:orchestrator <../o_bob/card.ttl#me> .

@@ -3,5 +3,5 @@
 
 :me 
     a         as:Service ;
-    as:name   "registration orchestrator" ;
+    as:name   "registration's orchestrator" ;
     as:inbox  <inbox> .

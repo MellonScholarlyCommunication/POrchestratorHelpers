@@ -7,4 +7,5 @@
     as:name   "registration" ;
     as:inbox  <inbox> ;
     as:outbox <events> ;
+    ex:artefacts <artefacts> ;
     ex:orchestrator <../o_registration/card.ttl#me> .
