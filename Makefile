@@ -1,5 +1,14 @@
 .PHONY: compile rules registry clean
 
+usage:
+	@echo "usage: make TARGET"
+	@echo 
+	@echo "targets:"
+	@echo "    compile"
+	@echo "    rules"
+	@echo "    registry"
+	@echo "    all"
+	@echo "    clean"
 compile:
 	tsc
 
