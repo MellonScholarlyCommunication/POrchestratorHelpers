@@ -4,6 +4,7 @@ local/cache/**
 local/ldn-sender/**
 local/*/*/inbox
 local/*/*/events
+local/*/*/artefacts
 orchestrator
 package-lock.json
 DEVELOPMENT
