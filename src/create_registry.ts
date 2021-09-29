@@ -2,9 +2,13 @@ import *  as N3 from 'n3';
 import { IQueryResultBindings } from "@comunica/actor-init-sparql";
 import { newEngine } from "@comunica/actor-init-sparql";
 import ns from './Namespaces'
-import { write } from 'fs';
+import { fstat, write } from 'fs';
+import { Command } from 'commander';
+import fs from 'fs';
 
-const mySource = 'http://localhost:2000';
+let mySource = 'http://localhost:2000';
+let myExtra  = undefined;
+
 const myEngine = newEngine();
 const writer   = new N3.Writer({
     prefixes: {
@@ -14,6 +18,17 @@ const writer   = new N3.Writer({
 });
 const { DataFactory } = N3;
 const { namedNode }   = DataFactory
+
+const program  = new Command();
+
+program.command('parse [file]')
+       .option('-b, --baseurl <url>','baseurl of the demo pod')
+       .action( (file,flags) => {
+            mySource = flags.baseurl ? flags.baseurl : mySource ;
+            myExtra  = file;
+       });
+
+program.parse(process.argv);
 
 listInboxes(mySource).then ( ids => {
     writer.addQuad(
@@ -37,6 +52,16 @@ listInboxes(mySource).then ( ids => {
         console.log(result);
     });
 });
+
+if (myExtra) {
+    fs.readFileSync(myExtra,'utf-8').split(/\r?\n/).forEach( (line) => {
+        writer.addQuad(
+            namedNode('#me'),
+            namedNode(ns.foaf('knows')),
+            namedNode(line)
+        );
+    });
+}
 
 async function listInboxes(source: string) : Promise<string[]> {
     const boxes = await queryBinding(source,`
