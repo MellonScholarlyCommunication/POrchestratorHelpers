@@ -1,11 +1,11 @@
 #!/bin/bash
 
 BASE=local
-ORG=institution
 NAME=$1
+ORG=${2:-institution}
 
 if [ "${NAME}" == "" ]; then
-    echo "usage: $0 name"
+    echo "usage: $0 name [organisation]"
     exit 1
 fi
 
