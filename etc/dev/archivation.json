@@ -1,0 +1,10 @@
+{
+    "me"        : "http://international.archive.org:3000/Archivator/profile/card#me",
+    "orchestrator" : {
+        "id"    : "http://localhost:2000/o_archivation/card.ttl#me",
+        "type"  : "https://www.w3.org/ns/activitystreams#Service",
+        "inbox" : "http://localhost:2000/o_archivation/inbox"
+    },
+    "output"       : "local/orchestrator/archivation" ,
+    "input"        : ["n3","n3/archivation"] 
+}
