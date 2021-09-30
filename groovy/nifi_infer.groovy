@@ -11,6 +11,7 @@ Optional:
      - See https://jena.apache.org/documentation/io/rdf-input.html
   - Attribute `shapesType` with the format of the Flow file (TURTLE,N-TRIPLES,RDF/XML, JSON-LD)
   - Attribute `outputDestination` =  attribute | flowfile (default flowfile)
+  - Attribute `baseUrl` with a baseUrl for the flow document
 
 Output:
   - An updated flowfile with the result of the inference or a new attribute output
@@ -33,9 +34,9 @@ import org.topbraid.shacl.util.ModelPrinter
 import java.io.FileInputStream
 import java.io.ByteArrayOutputStream
 
-def loadModel(inputStream, type) {
+def loadModel(inputStream,type,baseUrl="urn:x:base") {
     Model model = ModelFactory.createDefaultModel()
-    model.read(inputStream,"urn:x:base",type)
+    model.read(inputStream,baseUrl,type)
     return model;
 }
 
@@ -46,6 +47,7 @@ if (!flowFile) return
 outputRelation = REL_SUCCESS
 defaultInputType = "TURTLE"
 defaultOutputDestination = "flowfile"
+defaultBaseUrl = "urn:x:base"
 
 try {
   // Read the shapesFile attribute
@@ -74,13 +76,20 @@ try {
       outputDestination = defaultOutputDestination
   }
 
+  // Read the baseUrl attribute
+  baseUrl = flowFile.getAttribute("baseUrl")
+
+  if (!baseUrl) {
+      baseUrl = defaultBaseUrl
+  }
+
   results = null
 
   // Read/Write the file flowFile
   session.read(flowFile , { inputStream ->
-      dataModel = loadModel(inputStream, dataType)
+      dataModel = loadModel(inputStream, dataType, baseUrl)
 
-      shapesModel = loadModel(new FileInputStream(shapesFile), shapesType)
+      shapesModel = loadModel(new FileInputStream(shapesFile), shapesType, baseUrl)
 
       results = RuleUtil.executeRules(dataModel, shapesModel, null, null)
   } as InputStreamCallback)

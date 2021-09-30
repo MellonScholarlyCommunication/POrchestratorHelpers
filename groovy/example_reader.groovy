@@ -15,37 +15,51 @@ import org.apache.jena.riot.RDFDataMgr
 import org.apache.jena.riot.RDFFormat
 import java.io.FileInputStream
 
-def loadModel(fileName, type) {
+def loadModel(fileName, type, baseUrl="urn:dummy") {
     Model model = ModelFactory.createDefaultModel()
-    model.read(new FileInputStream(fileName),"urn:dummy",type)
+    model.read(new FileInputStream(fileName),baseUrl,type)
     return model;
 }
 
-if (args.size() < 1) {
-   System.err.println("usage: example_reader.groovy dataFile [outputType]")
+def baseUrl
+
+def cli = new CliBuilder()
+
+cli.with {
+    b(longOpt: 'baseUrl', 'Set baseUrl', args: 1, required: false)
+}
+def options = cli.parse(args)
+
+if (options && options.b) {
+    baseUrl = options.b
+}
+
+if (options.arguments().size() < 1) {
+   System.err.println("usage: example_reader.groovy [-b baseUrl] dataFile [outputType]")
    System.exit(1)
 }
 
-inputType  = "TURTLE"
-outputType = "TURTLE"
+def dataFile   = options.arguments()[0]
+def inputType  = "TURTLE"
+def outputType = "TURTLE"
 
-if (args.size() > 1) {
-    outputType = args[1]
+if (options.arguments().size() > 1) {
+    outputType = options.arguments()[1]
 }
 
-if (args[0].matches('.*\\.ttl$')) {
+if (dataFile.matches('.*\\.ttl$')) {
     inputType = "TURTLE"
 }
-else if (args[0].matches('.*\\.nt$')) {
+else if (dataFile.matches('.*\\.nt$')) {
     inputType = "NTRIPLES"
 }
-else if (args[0].matches('.*\\.jsonld$')) {
+else if (dataFile.matches('.*\\.jsonld$')) {
     inputType = "JSONLD"
 }
-else if (args[0].matches('.*\\.n3$')) {
+else if (dataFile.matches('.*\\.n3$')) {
     inputType = "N3"
 }
-else if (args[0].matches('.\\.rdf$')) {
+else if (dataFile.matches('.\\.rdf$')) {
     inputType = "RDFJSON"
 }
 
@@ -104,7 +118,7 @@ else {
     System.exit(2)
 }
 
-dataModel = loadModel(args[0],inputType)
+dataModel = loadModel(dataFile,inputType,baseUrl)
 
 //RDFDataMgr.write(System.out, dataModel, RDFFormat.JSONLD_FLATTEN_PRETTY);
 RDFDataMgr.write(System.out, dataModel, outputFormat);

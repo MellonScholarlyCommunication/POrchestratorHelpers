@@ -7,6 +7,8 @@ Required:
   - Attribute `inputType` with the input type
   - Attribute `outputType` with the output type
 
+Optional:
+  - Attribute `baseUrl` with a baseUrl for the flow document
 
 Output:
   - An updated flow with in the (new) format
@@ -26,9 +28,9 @@ import org.apache.jena.rdf.model.ModelFactory
 import org.apache.jena.riot.RDFDataMgr
 import org.apache.jena.riot.RDFFormat
 
-def loadModel(inputStream, type) {
+def loadModel(inputStream, type, baseUrl="urn:x:base") {
     Model model = ModelFactory.createDefaultModel()
-    model.read(inputStream,"urn:x:base",type)
+    model.read(inputStream,baseUrl,type)
     return model;
 }
 
@@ -99,6 +101,7 @@ if (!flowFile) return
 outputRelation = REL_SUCCESS
 defaultInputType = "TURTLE"
 defaultOutputType = "TURTLE"
+defaultBaseUrl = "urn:x:base"
 
 try {
     // Read the inputType attribute
@@ -115,9 +118,16 @@ try {
         outputType = defaultOutputType
     }
 
+    // Read the baseUrl attribute
+    baseUrl = flowFile.getAttribute("baseUrl")
+
+    if (!baseUrl) {
+        baseUrl = defaultBaseUrl
+    }
+
     // Read/Write the file flowFile
     session.write(flowFile , { inputStream , outputStream ->
-        dataModel = loadModel(inputStream, inputType)
+        dataModel = loadModel(inputStream, inputType, baseUrl)
 
         RDFDataMgr.write(outputStream, dataModel, string2format(outputType));
     } as StreamCallback)

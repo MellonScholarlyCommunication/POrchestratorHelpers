@@ -15,9 +15,9 @@ import org.apache.jena.riot.RDFDataMgr
 import org.apache.jena.riot.RDFFormat
 import java.io.FileInputStream
 
-def loadModel(fileName, type) {
+def loadModel(fileName, type, baseUrl="urn:dummy") {
     Model model = ModelFactory.createDefaultModel()
-    model.read(new FileInputStream(fileName),"urn:dummy",type)
+    model.read(new FileInputStream(fileName),baseUrl,type)
     return model;
 }
 
@@ -40,25 +40,40 @@ def followResource(resource, model) {
     it.close()
 }
 
-if (args.size() < 3) {
-   System.err.println("usage: example_split.groovy dataFile subject predicate")
+def baseUrl
+
+def cli = new CliBuilder()
+
+cli.with {
+    b(longOpt: 'baseUrl', 'Set baseUrl', args: 1, required: false)
+}
+
+def options = cli.parse(args)
+
+if (options && options.b) {
+    baseUrl = options.b
+}
+
+if (options.arguments().size() < 3) {
+   System.err.println("usage: example_split.groovy [-b] dataFile subject predicate")
    System.exit(1)
 }
 
-dataModel = loadModel(args[0],"TURTLE")
+def dataFile   = options.arguments()[0]
+def subjectIri = options.arguments()[1]
+def policyIri  = options.arguments()[2]
 
-subjectIri = args[1]
-policyIri  = args[2]
+def dataModel = loadModel(dataFile,"TURTLE",baseUrl)
 
-subject   = dataModel.getResource(subjectIri)
-property  = dataModel.getProperty(policyIri)
-it        = dataModel.listStatements(subject,property,null)
+def subject   = dataModel.getResource(subjectIri)
+def property  = dataModel.getProperty(policyIri)
+def it        = dataModel.listStatements(subject,property,null)
 
 System.out.println("----")
 
 while (it.hasNext()) {
-    st = it.nextStatement();
-    object = st.getObject();
+    def st = it.nextStatement();
+    def object = st.getObject();
 
     def accumulator = ModelFactory.createDefaultModel()
 
@@ -68,7 +83,6 @@ while (it.hasNext()) {
 
     System.out.println("----")
 }
-
 
 //RDFDataMgr.write(System.out, dataModel, RDFFormat.JSONLD_FLATTEN_PRETTY);
 //RDFDataMgr.write(System.out, dataModel, RDFFormat.NTRIPLES);

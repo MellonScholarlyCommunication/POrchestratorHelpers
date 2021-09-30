@@ -1,0 +1,26 @@
+@prefix dc: <http://purl.org/dc/terms/>.
+@prefix ldp: <http://www.w3.org/ns/ldp#>.
+@prefix posix: <http://www.w3.org/ns/posix/stat#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+
+<> a ldp:Container, ldp:BasicContainer, ldp:Resource.
+<fbd10fd9-ba10-4ef9-a98d-49addebfe767> a ldp:Resource.
+<bc00075b-9c0e-4549-ade5-63d8e314fecf> a ldp:Resource.
+<7177b994-89da-46fa-a664-1d2d26ac2270> a ldp:Resource.
+<8c981e86-0d92-4386-9748-83a4c964ddca> a ldp:Resource.
+<> dc:modified "2021-09-29T14:23:43.567Z"^^xsd:dateTime;
+    posix:mtime 1632925423;
+    <http://www.w3.org/ns/auth/acl#accessControl> <.acl>;
+    ldp:contains <fbd10fd9-ba10-4ef9-a98d-49addebfe767>, <bc00075b-9c0e-4549-ade5-63d8e314fecf>, <7177b994-89da-46fa-a664-1d2d26ac2270>, <8c981e86-0d92-4386-9748-83a4c964ddca>.
+<fbd10fd9-ba10-4ef9-a98d-49addebfe767> dc:modified "2021-09-29T12:00:48.011Z"^^xsd:dateTime;
+    posix:mtime 1632916848;
+    posix:size 888.
+<bc00075b-9c0e-4549-ade5-63d8e314fecf> dc:modified "2021-09-29T14:23:43.565Z"^^xsd:dateTime;
+    posix:mtime 1632925423;
+    posix:size 888.
+<7177b994-89da-46fa-a664-1d2d26ac2270> dc:modified "2021-09-29T12:59:13.424Z"^^xsd:dateTime;
+    posix:mtime 1632920353;
+    posix:size 880.
+<8c981e86-0d92-4386-9748-83a4c964ddca> dc:modified "2021-09-29T14:23:43.567Z"^^xsd:dateTime;
+    posix:mtime 1632925423;
+    posix:size 880.

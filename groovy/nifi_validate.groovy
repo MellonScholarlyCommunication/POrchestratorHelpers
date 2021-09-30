@@ -10,6 +10,7 @@ Optional:
   - Attribute `dataType` with the format of the Flow file (TURTLE,N-TRIPLES,RDF/XML, JSON-LD)
      - See https://jena.apache.org/documentation/io/rdf-input.html
   - Attribute `shapesType` with the format of the Flow file (TURTLE,N-TRIPLES,RDF/XML, JSON-LD)
+  - Attribute `baseUrl` with a baseUrl for the flow document
 
 Output:
   - Flow file as-is
@@ -34,9 +35,9 @@ import org.topbraid.shacl.vocabulary.SH
 import java.io.FileInputStream
 import java.io.ByteArrayOutputStream
 
-def loadModel(inputStream, type) {
+def loadModel(inputStream,type,baseUrl="urn:x:base") {
     Model model = ModelFactory.createDefaultModel()
-    model.read(inputStream,"urn:x:base",type)
+    model.read(inputStream,baseUrl,type)
     return model;
 }
 
@@ -46,6 +47,7 @@ if (!flowFile) return
 
 outputRelation = REL_SUCCESS
 defaultInputType = "TURTLE"
+defaultBaseUrl = "urn:x:base"
 
 try {
   // Read the shapesFile attribute
@@ -67,10 +69,17 @@ try {
       shapesType = defaultInputType
   }
 
+  // Read the baseUrl attribute
+  baseUrl = flowFile.getAttribute("baseUrl")
+
+  if (!baseUrl) {
+      baseUrl = defaultBaseUrl
+  }
+
   // Read the file flowFile
   session.read(flowFile , { inputStream ->
       dataModel = loadModel(inputStream, dataType)
-      shapesModel = loadModel(new FileInputStream(shapesFile), shapesType)
+      shapesModel = loadModel(new FileInputStream(shapesFile), shapesType, baseUrl)
 
       report = ValidationUtil.validateModel(dataModel, shapesModel, true)
 

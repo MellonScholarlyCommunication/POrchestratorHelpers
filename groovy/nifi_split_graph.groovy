@@ -12,6 +12,7 @@ Optional:
      - See https://jena.apache.org/documentation/io/rdf-input.html
   - Attribute `inputSource` with "flowfile" or an attribute containing the graph
   - Attribite `outputType` with the name of a serialization
+  - Attribute `baseUrl` with a baseUrl for the flow document
 
 Output:
   - For search ?subject ?preficate pattern a new flow file with the fragment graph
@@ -38,9 +39,9 @@ import java.io.ByteArrayOutputStream
 import java.util.ArrayList
 import java.util.List
 
-def loadModel(inputStream, type) {
+def loadModel(inputStream, type, baseUrl="urn:x:base") {
     Model model = ModelFactory.createDefaultModel()
-    model.read(inputStream,"urn:x:base",type)
+    model.read(inputStream,baseUrl,type)
     return model;
 }
 
@@ -132,6 +133,7 @@ if (!flowFile) return
 outputRelation = REL_SUCCESS
 defaultInputType = "TURTLE"
 defaultInputSource = "flowfile"
+defaultBaseUrl = "urn:x:base"
 
 def splitFlowFiles = new ArrayList<>();
 
@@ -170,17 +172,24 @@ try {
         outputType = inputType
     }
 
+    // Read the baseUrl attribute 
+    def baseUrl = flowFile.getAttribute("baseUrl")
+
+    if (!baseUrl) {
+        baseUrl = defaultBaseUrl
+    }
+
     def dataModel = null;
 
     if (inputSource == "flowfile" ) {
         session.read(flowFile , { inputStream ->
-            dataModel = loadModel(inputStream, inputType)
+            dataModel = loadModel(inputStream, inputType, baseUrl)
         } as InputStreamCallback)
     }
     else {
         def graph = flowFile.getAttribute(inputSource)
         def bt = new ByteArrayInputStream(graph.getBytes())
-        dataModel = loadModel(bt, inputType)
+        dataModel = loadModel(bt, inputType, baseUrl)
         bt.close()
     }
 

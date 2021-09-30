@@ -11,6 +11,7 @@ Optional:
      - See https://jena.apache.org/documentation/io/rdf-input.html
   - Attribute `outputDestination` =  attribute | flowfile (default flowfile)
   - Attribute `outputAttribute` = name of output attribute (default output)
+  - Attribute `baseUrl` with a baseUrl for the flow document
 
 Output:
   - An updated flowfile with the result of the inference or a new attribute output
@@ -39,13 +40,13 @@ import org.apache.jena.query.QueryExecutionFactory
 import org.apache.jena.query.ResultSetFormatter
 import java.io.PrintWriter
 
-def loadModel(inputStream, type) {
+def loadModel(inputStream,type,baseUrl="urn:x:base") {
     Model model = ModelFactory.createDefaultModel()
-    model.read(inputStream,"urn:x:base",type)
+    model.read(inputStream,baseUrl,type)
     return model;
 }
 
-def executeQuery(sparlQuery, dataModel) {
+def executeQuery(sparlQuery,dataModel) {
     query = QueryFactory.create(sparlQuery)
     qexec = QueryExecutionFactory.create( query, dataModel )
 
@@ -88,6 +89,7 @@ outputRelation = REL_SUCCESS
 defaultInputType = "TURTLE"
 defaultOutputDestination = "flowfile"
 defaultOutputAttribute = "output"
+defaultBaseUrl = "urn:x:base"
 
 try {
   // Read the SPARQL query attribute
@@ -111,18 +113,25 @@ try {
       outputDestination = defaultOutputDestination
   }
 
-  // Read the outputAttribute
+  // Read the outputAttribute attribute
   outputAttribute = flowFile.getAttribute("outputAttribute")
 
   if (!outputAttribute) {
       outputAttribute = defaultOutputAttribute
   }
 
+  // Read the baseUrl attribute
+  baseUrl = flowFile.getAttribute("baseUrl")
+
+  if (!baseUrl) {
+      baseUrl = defaultBaseUrl
+  }
+
   results = null
 
   // Read/Write the file flowFile
   session.read(flowFile , { inputStream ->
-      dataModel = loadModel(inputStream, dataType)
+      dataModel = loadModel(inputStream, dataType, baseUrl)
 
       results = executeQuery(sparlQuery, dataModel)
   } as InputStreamCallback)

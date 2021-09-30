@@ -16,37 +16,53 @@ import org.topbraid.shacl.util.ModelPrinter
 import org.apache.jena.rdf.model.ModelFactory
 import java.io.FileInputStream;
 
-def loadModel(fileName, type) {
+def loadModel(fileName, type, baseUrl="urn:dummy") {
     Model model = ModelFactory.createDefaultModel()
-    model.read(new FileInputStream(fileName),"urn:dummy",type)
+    model.read(new FileInputStream(fileName),baseUrl,type)
     return model;
 }
 
-if (args.size() != 2) {
-   System.err.println("usage: example_infer.groovy dataFile shapesFile ")
+def baseUrl
+
+def cli = new CliBuilder()
+
+cli.with {
+    b(longOpt: 'baseUrl', 'Set baseUrl', args: 1, required: false)
+}
+
+def options = cli.parse(args)
+
+if (options && options.b) {
+    baseUrl = options.b
+}
+
+if (options.arguments().size() != 2) {
+   System.err.println("usage: example_infer.groovy [-b] dataFile shapesFile ")
    System.exit(1)
 }
 
-inputType  = "TURTLE"
+def inputType  = "TURTLE"
+def dataFile   = options.arguments()[0]
+def shapesFile = options.arguments()[1]
 
-if (args[0].matches('.*\\.ttl$')) {
+if (dataFile.matches('.*\\.ttl$')) {
     inputType = "TURTLE"
 }
-else if (args[0].matches('.*\\.nt$')) {
+else if (dataFile.matches('.*\\.nt$')) {
     inputType = "NTRIPLES"
 }
-else if (args[0].matches('.*\\.jsonld$')) {
+else if (dataFile.matches('.*\\.jsonld$')) {
     inputType = "JSONLD"
 }
-else if (args[0].matches('.*\\.n3$')) {
+else if (dataFile.matches('.*\\.n3$')) {
     inputType = "N3"
 }
-else if (args[0].matches('.\\.rdf$')) {
+else if (dataFile.matches('.\\.rdf$')) {
     inputType = "RDFJSON"
 }
 
-dataModel  = loadModel(args[0], inputType);
-shapesModel = loadModel(args[1], "TURTLE");
+def dataModel  = loadModel(dataFile, inputType);
+def shapesModel = loadModel(shapesFile, "TURTLE");
 
 // Perform the rule calculation, using the data model
 // also as the rule model - you may have them separated
