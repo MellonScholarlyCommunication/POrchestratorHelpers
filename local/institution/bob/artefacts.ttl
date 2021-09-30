@@ -1,0 +1,20 @@
+@prefix ldp: <http://www.w3.org/ns/ldp#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+
+<> <http://www.w3.org/1999/02/22-rdf-syntax-ns#a> ldp:BasicContainer, ldp:Container;
+    ldp:contains <https://biblio.ugent.be/publication/8701520>.
+<https://biblio.ugent.be/publication/8701520> a ldp:Resource;
+    dcterms:modified "2021-05-31T13:03:33Z".
+<> ldp:contains <https://biblio.ugent.be/publication/8714763>.
+<https://biblio.ugent.be/publication/8714763> a ldp:Resource;
+    dcterms:modified "2021-07-16T14:56:11Z".
+<> ldp:contains <https://biblio.ugent.be/publication/8716297>.
+<https://biblio.ugent.be/publication/8716297> a ldp:Resource;
+    dcterms:modified "2021-07-16T13:17:43Z".
+<> ldp:contains <https://biblio.ugent.be/publication/8716298>.
+<https://biblio.ugent.be/publication/8716298> a ldp:Resource;
+    dcterms:modified "2021-07-16T13:16:07Z".
+<> ldp:contains <https://biblio.ugent.be/publication/8716302>.
+<https://biblio.ugent.be/publication/8716302> a ldp:Resource;
+    dcterms:modified "2021-07-16T13:20:17Z".
+

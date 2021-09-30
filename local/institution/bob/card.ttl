@@ -7,5 +7,5 @@
     as:name   "bob" ;
     as:inbox  <inbox> ;
     as:outbox <events> ;
-    ex:artefacts <artefacts> ;
+    ex:artefacts <artefacts.ttl> ;
     ex:orchestrator <../o_bob/card.ttl#me> .

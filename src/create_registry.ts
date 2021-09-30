@@ -1,7 +1,7 @@
 import *  as N3 from 'n3';
 import { IQueryResultBindings } from "@comunica/actor-init-sparql";
 import { newEngine } from "@comunica/actor-init-sparql";
-import ns from './Namespaces'
+import ns from './Namespaces';
 import { fstat, write } from 'fs';
 import { Command } from 'commander';
 import fs from 'fs';
@@ -33,12 +33,12 @@ program.parse(process.argv);
 listInboxes(mySource).then ( ids => {
     writer.addQuad(
         namedNode('#me'),
-        namedNode(ns.rdf('a')),
+        namedNode(ns.rdf('type')),
         namedNode(ns.foaf('Agent'))
     );
     writer.addQuad(
         namedNode('#me'),
-        namedNode(ns.rdf('a')),
+        namedNode(ns.rdf('type')),
         namedNode(ns.schema('Service'))
     );
     ids.forEach( id => {
