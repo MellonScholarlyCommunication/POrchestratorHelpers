@@ -1,5 +1,5 @@
 {
-    "me"      : "http://157.193.231.95/institution/alice/card.ttl#me",
+    "me"      : "https://bellow2.ugent.be/institution/alice/card.ttl#me",
     "output"  : "local/orchestrator/alice" ,
     "input"   : ["n3"] 
 }

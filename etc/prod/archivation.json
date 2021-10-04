@@ -1,9 +1,9 @@
 {
     "me"        : "https://hochstenbach.inrupt.net/profile/card#me",
     "orchestrator" : {
-        "id"    : "http://localhost:2000/o_archivation/card.ttl#me",
+        "id"    : "https://bellow2.ugent.be/institution/o_archivation/card.ttl#me",
         "type"  : "https://www.w3.org/ns/activitystreams#Service",
-        "inbox" : "http://localhost:2000/o_archivation/inbox"
+        "inbox" : "https://bellow2.ugent.be/institution/o_archivation/inbox"
     },
     "robustlinks" : {
         "id"    : "urn:uuid:9b4095a1-92f5-4994-b8db-81c0b3523a2d",

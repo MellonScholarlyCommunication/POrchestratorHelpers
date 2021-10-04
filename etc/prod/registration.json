@@ -1,9 +1,9 @@
 {
-    "me"           : "http://157.193.231.95/institution/registration/card.ttl#me",
+    "me"           : "https://bellow2.ugent.be/institution/registration/card.ttl#me",
     "orchestrator" : {
-        "id"    : "http://157.193.231.95/institution/o_registration/card.ttl#me",
+        "id"    : "https://bellow2.ugent.be/institution/o_registration/card.ttl#me",
         "type"  : "https://www.w3.org/ns/activitystreams#Service",
-        "inbox" : "http://157.193.231.95/institution/o_registration/inbox"
+        "inbox" : "https://bellow2.ugent.be/institution/o_registration/inbox"
     },
     "output"       : "local/orchestrator/registration" ,
     "input"        : ["n3","n3/registration"] 
