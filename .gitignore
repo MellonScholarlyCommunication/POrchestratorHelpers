@@ -7,4 +7,5 @@ local/*/*/events
 local/*/*/artefacts
 orchestrator
 package-lock.json
+etc/demo.txt
 DEVELOPMENT
