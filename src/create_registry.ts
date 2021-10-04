@@ -55,11 +55,13 @@ listInboxes(mySource).then ( ids => {
 
 if (myExtra) {
     fs.readFileSync(myExtra,'utf-8').split(/\r?\n/).forEach( (line) => {
-        writer.addQuad(
-            namedNode('#me'),
-            namedNode(ns.foaf('knows')),
-            namedNode(line)
-        );
+        if (line.length > 0 && line.match(/.+/)) {
+            writer.addQuad(
+                namedNode('#me'),
+                namedNode(ns.foaf('knows')),
+                namedNode(line)
+            );
+        }
     });
 }
 
