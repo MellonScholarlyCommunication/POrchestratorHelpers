@@ -1,24 +1,24 @@
 #!/bin/bash
 
-BASE=local
 NAME=$1
-ORG=${2:-institution}
+BASE=${2:-local/institution}
+ORCHESTRATOR=${3:-local/orchestrator}
 
 if [ "${NAME}" == "" ]; then
-    echo "usage: $0 name [organisation]"
+    echo "usage: $0 name [base] [orchestrator]"
     exit 1
 fi
 
 # Make the LDP environment
-mkdir -p ${BASE}/${ORG}/${NAME}/inbox
-mkdir -p ${BASE}/${ORG}/${NAME}/events
-mkdir -p ${BASE}/${ORG}/${NAME}/artefacts
+mkdir -p ${BASE}/${NAME}/inbox
+mkdir -p ${BASE}/${NAME}/events
+mkdir -p ${BASE}/${NAME}/artefacts
 
-touch ${BASE}/${ORG}/${NAME}/inbox/.gitignore
-touch ${BASE}/${ORG}/${NAME}/events/.gitignore
-touch ${BASE}/${ORG}/${NAME}/artefacts/.gitignore
+touch ${BASE}/${NAME}/inbox/.gitignore
+touch ${BASE}/${NAME}/events/.gitignore
+touch ${BASE}/${NAME}/artefacts/.gitignore
 
-cat > ${BASE}/${ORG}/${NAME}/card.ttl <<EOF
+cat > ${BASE}/${NAME}/card.ttl <<EOF
 @prefix : <#>.
 @prefix as: <http://www.w3.org/ns/activitystreams#>.
 @prefix ex: <https://www.example.org/>.
@@ -33,11 +33,11 @@ cat > ${BASE}/${ORG}/${NAME}/card.ttl <<EOF
 EOF
 
 # Make the orchestrator inbox
-mkdir -p ${BASE}/${ORG}/o_${NAME}/inbox
+mkdir -p ${BASE}/o_${NAME}/inbox
 
-touch ${BASE}/${ORG}/o_${NAME}/inbox/.gitignore
+touch ${BASE}/o_${NAME}/inbox/.gitignore
 
-cat > ${BASE}/${ORG}/o_${NAME}/card.ttl <<EOF
+cat > ${BASE}/o_${NAME}/card.ttl <<EOF
 @prefix : <#>.
 @prefix as: <http://www.w3.org/ns/activitystreams#>.
 
@@ -48,4 +48,4 @@ cat > ${BASE}/${ORG}/o_${NAME}/card.ttl <<EOF
 EOF
 
 # Make the orchestrator rules
-mkdir -p ${BASE}/orchestrator/${NAME}
+mkdir -p ${ORCHESTRATOR}/${NAME}
