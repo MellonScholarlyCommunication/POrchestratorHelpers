@@ -16,7 +16,7 @@ rules:
 	bin/make_rules.sh
 
 registry:
-	node js/create_registry.js parse etc/demo.txt > local/institution/registry.ttl
+	node js/create_registry.js parse --baseurl=http://localhost:2000/ etc/demo.txt > local/institution/registry.ttl
 
 all: compile rules registry
 
