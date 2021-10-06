@@ -61,7 +61,7 @@ if (myWebIdSource) {
 if (myWebIdFile) {
     fs.readFileSync(myWebIdFile,'utf-8').split(/\r?\n/).forEach( (line) => {
         // Skip empty lines or outcommented lines
-        if (line.length > 0 && line.match(/.+/) && ! line.match(/^#/)) {
+        if (line.length > 0 && line.match(/.+/) && ! line.match(/^\s*#/)) {
             writer.addQuad(
                 namedNode('#me'),
                 namedNode(ns.foaf('knows')),
