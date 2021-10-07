@@ -8,4 +8,5 @@ local/*/*/artefacts
 orchestrator
 package-lock.json
 etc/demo.txt
+solid/*.zip
 DEVELOPMENT

@@ -1,14 +1,15 @@
-.PHONY: compile rules registry clean
+.PHONY: compile rules registry archivator clean
 
 usage:
 	@echo "usage: make TARGET"
 	@echo 
 	@echo "targets:"
+	@echo "    all"
 	@echo "    compile"
 	@echo "    rules"
 	@echo "    registry"
-	@echo "    all"
 	@echo "    clean"
+
 compile:
 	tsc
 

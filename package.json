@@ -9,6 +9,7 @@
     "mimetype": "^0.0.8",
     "mustache": "^4.2.0",
     "n3": "^1.11.1",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.1",
+    "solid-shell": "^2.0.6"
   }
 }

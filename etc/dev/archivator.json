@@ -1,0 +1,15 @@
+{
+    "me"        : "https://hochstenbach.inrupt.net/archivator/profile/service.ttl#me",
+    "orchestrator" : {
+        "id"    : "https://hochstenbach.inrupt.net/archivator/profile/orchestrator.ttl#me",
+        "type"  : "https://www.w3.org/ns/activitystreams#Service",
+        "inbox" : "https://hochstenbach.inrupt.net/archivator/orchestrator/"
+    },
+    "robustlinks" : {
+        "id"    : "urn:uuid:9b4095a1-92f5-4994-b8db-81c0b3523a2d",
+        "type"  : "https://www.w3.org/ns/activitystreams#Service",
+        "inbox" : "https://hochstenbach.inrupt.net/archivator/robustlinks/"
+    },
+    "output"       : "local/orchestrator/archivator" ,
+    "input"        : ["n3","n3/archivation"] 
+}

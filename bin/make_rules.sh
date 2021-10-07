@@ -1,7 +1,7 @@
 #!/bin/bash
 
 environment="prod"
-names=(alice bob registration archivation)
+names=(alice bob registration archivation archivator)
 if [ -f DEVELOPMENT ]; then
     environment="dev"
 fi
