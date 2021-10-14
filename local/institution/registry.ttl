@@ -1,7 +1,1 @@
-@prefix foaf: <http://xmlns.com/foaf/0.1/>.
-@prefix schema: <http://schema.org/>.
-
-<#me> foaf:knows <https://hochstenbach.inrupt.net/archivator/profile/card.ttl#me>;
-    a foaf:Agent, schema:Service;
-    foaf:knows <http://localhost:2000/bob/card.ttl#me>, <http://localhost:2000/o_archivation/card.ttl#me>, <http://localhost:2000/o_alice/card.ttl#me>, <http://localhost:2000/registration/card.ttl#me>, <http://localhost:2000/alice/card.ttl#me>, <http://localhost:2000/o_bob/card.ttl#me>, <http://localhost:2000/o_registration/card.ttl#me>.
-
+>>>
