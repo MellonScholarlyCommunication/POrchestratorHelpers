@@ -3,7 +3,7 @@
 @prefix as: <http://www.w3.org/ns/activitystreams#>.
 @prefix ex: <https://www.example.org/>.
 
-<https://hochstenbach.solidcommunity.net/archivator/profile/orchestrator.ttl#me>
+<https://hochstenbach.solidcommunity.net/registrator/profile/orchestrator.ttl#me>
     as:name "Registrator's Orchestrator";
     as:inbox <https://hochstenbach.solidcommunity.net/registrator/orchestrator/>;       
     a foaf:Service.
