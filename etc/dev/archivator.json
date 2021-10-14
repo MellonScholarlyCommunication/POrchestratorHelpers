@@ -11,5 +11,5 @@
         "inbox" : "https://hochstenbach.inrupt.net/archivator/robustlinks/"
     },
     "output"       : "local/orchestrator/archivator" ,
-    "input"        : ["n3","n3/archivation"] 
+    "input"        : ["n3","n3/archivator"] 
 }

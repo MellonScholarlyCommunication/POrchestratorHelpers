@@ -1,0 +1,12 @@
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix solid: <http://www.w3.org/ns/solid/terms#>.
+@prefix as: <http://www.w3.org/ns/activitystreams#>.
+@prefix ex: <https://www.example.org/>.
+
+<https://hochstenbach.solidcommunity.net/registrator/profile/service.ttl#me>
+    as:name "Registrator";
+    as:inbox <https://hochstenbach.solidcommunity.net/registrator/inbox/>;       
+    as:outbox <https://hochstenbach.solidcommunity.net/registrator/outbox/>;
+    ex:orchestrator <https://hochstenbach.solidcommunity.net/registrator/profile/orchestrator.ttl#me>;
+    ex:artefacts <https://hochstenbach.solidcommunity.net/registrator/artefacts/>;
+    a foaf:Service.

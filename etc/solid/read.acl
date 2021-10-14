@@ -1,0 +1,19 @@
+@prefix : <#>.
+@prefix acl: <http://www.w3.org/ns/auth/acl#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix c: </profile/card#>.
+@prefix n0: <./>.
+
+:owner
+    a acl:Authorization;
+    acl:accessTo n0:;
+    acl:agent c:me;
+    acl:default n0:;
+    acl:mode acl:Control, acl:Read, acl:Write.
+    
+:public
+    a acl:Authorization;
+    acl:accessTo n0:;
+    acl:agentClass foaf:Agent;
+    acl:default n0:;
+    acl:mode acl:Read.

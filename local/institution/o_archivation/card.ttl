@@ -1,7 +1,0 @@
-@prefix : <#>.
-@prefix as: <http://www.w3.org/ns/activitystreams#>.
-
-:me 
-    a         as:Service ;
-    as:name   "archivator's orchestrator" ;
-    as:inbox  <inbox> .
