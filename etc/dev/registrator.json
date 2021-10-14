@@ -1,5 +1,5 @@
 {
-    "me"        : "https://hochstenbach.inrupt.net/registrator/profile/service.ttl#me",
+    "me"        : "https://hochstenbach.solidcommunity.net/registrator/profile/service.ttl#me",
     "orchestrator" : {
         "id"    : "https://hochstenbach.solidcommunity.net/registator/profile/orchestrator.ttl#me",
         "type"  : "https://www.w3.org/ns/activitystreams#Service",
