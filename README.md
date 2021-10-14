@@ -27,29 +27,13 @@ All `groovy/example_*.groovy` are command line tools that demostrate the capabil
 groovy/example_reader.groovy mydata.ttl NT > mydata.nt
 ```
 
-# Sol command line tool
+# Optional
 
-This code inclides Jeff Zucker's https://www.npmjs.com/package/solid-shell command line
-tool to administer Solid Pods. 
+## Solid_auth.pl tool
 
-To run this tool your Solid pod must have "https://solid-node-client" as a trusted app.
+The demonstrator uses `solid_auth.pl` to periodically clean an mirror
+Pods.
 
-For example in the Inrupt Pod
+This Perl program can be installed from https://metacpan.org/pod/Web::Solid::Auth
 
-- Login into your pod
-- In the right-top menu choose `Preferences`
-- In the `Manage your trusted applications` add `https://solid-node-client`
-- Give this client some access modes so that it can manage your pod (e.g. Read, Write,Append)
-
-Set in your environment these variables:
-
-- SOLID_USERNAME : e.g. `mypod`
-- SOLID_PASSWORD 
-- SOLID_IDP : e.g. `https://inrupt.net`
-- SOLID_REMOTE_BASE : the base directory for all your requests, e.g. `https://mypod.inrupt.net`
-
-Now you can run the `sol` command:
-
-```
-$ npx sol
-```
+See https://metacpan.org/pod/Web::Solid::Auth for instructions
