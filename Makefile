@@ -10,6 +10,7 @@ usage:
 	@echo "    rules-archivator"
 	@echo "    registry"
 	@echo "    clean"
+	@echo "    clean-archivator"
 
 compile:
 	tsc
@@ -27,3 +28,9 @@ all: compile rules registry
 
 clean:
 	node js/clean_data.js institution
+
+clean-archivator:
+	solid_auth.pl -x clean /archivator/inbox/
+	solid_auth.pl -x clean /archivator/outbox/
+	solid_auth.pl -x clean /archivator/orchestrator/
+	solid_auth.pl -x clean /archivator/robustlinks/
