@@ -27,7 +27,6 @@ program.command('parse [file]')
 
 program.parse(process.argv);
 
-
 if (myWebIdFile) {
     fs.readFileSync(myWebIdFile,'utf-8').split(/\r?\n/).forEach( (line) => {
         // Skip empty lines or outcommented lines

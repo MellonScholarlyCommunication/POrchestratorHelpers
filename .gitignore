@@ -5,6 +5,7 @@ local/ldn-sender/**
 local/*/*/inbox
 local/*/*/events
 local/*/*/artefacts
+local/institution/registry.ttl
 orchestrator
 package-lock.json
 etc/demo.txt
