@@ -12,7 +12,7 @@ shift
 
 TMPFILE=$(mktemp)
 
-solid_auth.pl curl -H "Accept: application/ld+json" ${URL} > ${TMPFILE}
+curl -H "Accept: application/ld+json" ${URL} > ${TMPFILE}
 
 orchestrator/bin/orchestrator.sh ${TMPFILE} `pwd`/$@
 
