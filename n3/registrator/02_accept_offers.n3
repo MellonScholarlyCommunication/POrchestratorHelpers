@@ -10,8 +10,13 @@ PREFIX fno:  <https://w3id.org/function/ontology#>
 PREFIX log:  <http://www.w3.org/2000/10/swap/log#>
 PREFIX list: <http://www.w3.org/2000/10/swap/list#>
 
+# Define the location of my own inbox
 <{{{orchestrator.id}}}> a <{{{orchestrator.type}}}> .
 <{{{orchestrator.id}}}> ldp:inbox <{{{orchestrator.inbox}}}> .
+
+# Define the location of my known librecat implementation
+<{{{librecat.id}}}> a <{{{librecat.type}}}> .
+<{{{librecat.id}}}> ldp:inbox <{{{librecat.inbox}}}> .
 
 {
   [ ex:TopGraph ?id ] .
@@ -41,6 +46,24 @@ PREFIX list: <http://www.w3.org/2000/10/swap/list#>
             as:origin    <{{{orchestrator.id}}}> ;
             as:target    ?actor;
             as:object    ?id 
+      ]
+    ]
+  ].
+
+  # Forward the notification to my librecat implementation
+  # We just send it directly to the correct inbox
+  [ pol:policy [
+      a fno:Execution ;
+      fno:executes ex:sendTarget ;
+      ex:notification [
+            a as:Offer ;
+            as:inReplyTo ?id ;
+            as:actor     me: ;
+            as:origin    <{{{orchestrator.id}}}> ;
+            as:target    <{{{librecat.id}}}> ;
+            as:context   ?object ;
+            as:object    ?id ;
+            as:audience  ?actor        
       ]
     ]
   ].

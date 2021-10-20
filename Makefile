@@ -88,3 +88,8 @@ registrator-clean:
 	solid_auth.pl -w https://hochstenbach.solidcommunity.net/profile/card#me \
 				  -b https://hochstenbach.solidcommunity.net \
 				  -x clean /registrator/orchestrator/
+
+	solid_auth.pl -w https://hochstenbach.solidcommunity.net/profile/card#me \
+				  -b https://hochstenbach.solidcommunity.net \
+				  -x clean /registrator/librecat/
+

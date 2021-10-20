@@ -5,6 +5,11 @@
         "type"  : "https://www.w3.org/ns/activitystreams#Service",
         "inbox" : "https://hochstenbach.solidcommunity.net/registrator/orchestrator/"
     },
+    "librecat" : {
+        "id"    : "urn:uuid:e9b57352-5767-426e-a0b3-7fed3c64b9b5",
+        "type"  : "https://www.w3.org/ns/activitystreams#Service",
+        "inbox" : "https://hochstenbach.solidcommunity.net/registrator/librecat/"
+    },
     "output"       : "local/orchestrator/registrator" ,
     "input"        : ["n3","n3/registrator"] 
 }
