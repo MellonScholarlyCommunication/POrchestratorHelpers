@@ -24,7 +24,7 @@ PREFIX log:  <http://www.w3.org/2000/10/swap/log#>
 {
   [ pol:policy [
       a fno:Execution ;
-      fno:executes ex:sendOutbox ;
+      fno:executes ex:sendTarget ;
       ex:notification ?id
     ]
   ].
