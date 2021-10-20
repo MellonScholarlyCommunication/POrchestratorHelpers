@@ -1,4 +1,4 @@
-.PHONY: compile rules registry archivator clean
+.PHONY: compile watch rules registry archivator clean
 
 usage:
 	@echo "usage: make TARGET"
@@ -6,6 +6,7 @@ usage:
 	@echo "local targets:"
 	@echo "    all"
 	@echo "    compile"
+	@echo "    watch"
 	@echo "    rules"
 	@echo "    registry"
 	@echo "    clean"
@@ -21,6 +22,9 @@ usage:
 
 compile:
 	tsc
+
+watch:
+	tsc -w
 
 rules:
 	bin/make_rules.sh

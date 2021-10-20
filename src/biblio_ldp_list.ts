@@ -56,10 +56,11 @@ async function biblioLdp(personId: string) {
                     namedNode(ns.rdf('type')),
                     namedNode(ns.ldp('Resource'))
                );
+
                writer.addQuad(
                     namedNode(`${baseUrl}/publication/${id}`),
                     namedNode(ns.dct('modified')),
-                    literal(modified)
+                    literal(modified,namedNode(ns.xsd('dateTime')))
                );
             }
         });

@@ -10,4 +10,5 @@ orchestrator
 package-lock.json
 etc/demo.txt
 solid/*.zip
+data/**
 DEVELOPMENT
