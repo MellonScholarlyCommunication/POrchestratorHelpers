@@ -38,6 +38,11 @@ program.command('list')
             cmd_list();
        });
 
+program.command('qae url webid')
+       .action( (url,webid) => {
+            cmd_qae(url,webid);
+       });
+
 program.parse(process.argv);
 
 async function cmd_list() {
@@ -150,6 +155,46 @@ async function cmd_get(id: string) {
     const jdata = await api_get(`/publication/${id}`);
 
     console.log(JSON.stringify(jdata));
+}
+
+async function cmd_qae(url: string, webid: string) {
+    let jdata = {
+        "data" : {
+            "attributes" : {
+                "author": [
+                    { 
+                      "first_name" : "John" ,
+                      "last_name" : "Doe" ,
+                      "full_name" : "Joen Doe"
+                    }  
+                ] ,
+                "main_file_link" : [
+                    {
+                        "open_access": "1" ,
+                        "url" : url
+                    }
+                ],
+                "message" : `Notification from ${webid}` ,
+                "oa": "1",
+                "status" : "private" ,
+                "title" : `Quick and easy for - ${url}`,
+                "type" : "journal_article",
+                "user_id" : 1234 
+            } ,
+            "type" : "publication"
+        }
+    };
+
+    try {
+        const rdata = await api_post('/publication',jdata);
+
+        console.log(JSON.stringify(rdata));
+    }
+    catch( e ) {
+        console.error('Oops');
+        console.error(e);
+        process.exit(2);
+    }
 }
 
 async function cmd_post(path: string) {
