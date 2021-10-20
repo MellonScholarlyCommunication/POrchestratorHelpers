@@ -15,6 +15,9 @@ if ( ! librecat_api_key) {
 
 const program  = new Command()
 
+program
+       .option('-m, --max <num>', 'maximum size of the list')
+
 program.command('get id')
        .action( (id) => {
             cmd_get(id);
@@ -62,20 +65,30 @@ async function cmd_list() {
         namedNode(ns.ldp('Container'))
     ); 
 
-    do {
-        const jdata = typeof page == 'undefined' ? 
-                    await api_get(`/publication`) :
-                    await api_get(`/publication${page}`);
-
-        if ("errors" in jdata) {
-            console.log(JSON.stringify(jdata));
+    const artefacts = await librecat_walker();
+    const compare = (a,b) => {
+        if (a.date_updated < b.date_updated) {
+            return 1;
         }
+        if (a.date_updated > b.date_updated) {
+            return -1;
+        }
+        return 0;
+    };
 
-        const data: any[]  = jdata.data;
-        const next: string = jdata.links.next;
+    let list ;
 
-        data.forEach( (item) => {
+    if (program.opts().max) {
+        let max = parseInt(program.opts().max);
+        if (artefacts.length > max) {
+            list = artefacts.sort(compare).slice(0,max);
+        }
+    }
+    else {
+        list = artefacts.sort(compare);
+    }
 
+    list.forEach( (item) => {
             writer.addQuad(
                 namedNode(`${librecat_front}/record/`) ,
                 namedNode(ns.ldp('contains')),
@@ -91,9 +104,34 @@ async function cmd_list() {
            writer.addQuad(
                 namedNode(`${librecat_front}/record/${item.id}`),
                 namedNode(ns.dct('modified')),
-                literal(item.attributes.date_updated,namedNode(ns.xsd('dateTime')))
+                literal(item.date_updated,namedNode(ns.xsd('dateTime')))
             );
+    });
 
+    writer.end ( (error,result) => {
+        console.log(result);
+    })
+}
+
+async function librecat_walker() {
+    let page: string;
+    let artefacts = [];
+
+    do {
+        const jdata = typeof page == 'undefined' ? 
+                    await api_get(`/publication`) :
+                    await api_get(`/publication${page}`);
+
+        if ("errors" in jdata) {
+            console.log(JSON.stringify(jdata));
+            break;
+        }
+
+        const data: any[]  = jdata.data;
+        const next: string = jdata.links.next;
+
+        data.forEach( (item) => {
+            artefacts.push( { id : item.id , date_updated : item.attributes.date_updated });
         });
 
         // Calculate the next page
@@ -105,9 +143,7 @@ async function cmd_list() {
         }
     } while (typeof page !== 'undefined');
 
-    writer.end ( (error,result) => {
-        console.log(result);
-    })
+    return artefacts;
 }
 
 async function cmd_get(id: string) {
