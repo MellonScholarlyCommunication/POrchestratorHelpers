@@ -10,13 +10,13 @@ const program  = new Command();
 program.option('-d,--download','download');
 
 program.command('list url')
-        .action( (url) => {
-            cmd_list(url);
+        .action( async (url) => {
+            process.exitCode = await cmd_list(url);
         });
 
 program.command('get url rel') 
-        .action( (url,rel) => {
-            cmd_get(url,rel);
+        .action( async (url,rel) => {
+            process.exitCode = await cmd_get(url,rel);
         });
 
 program.parse(process.argv);
@@ -24,13 +24,14 @@ program.parse(process.argv);
 async function cmd_list(url: string) {
     const links = await document_links(url);
     console.log(links);
+    return 0;
 }
 
 async function cmd_get(url: string, rel: string) {
     const links = await document_links(url);
 
     if (! (rel in links)) {
-        return;
+        return 2;
     }
 
     const rel_url = links[rel]['url'];
@@ -45,6 +46,8 @@ async function cmd_get(url: string, rel: string) {
     else {
         console.log(rel_url);
     }
+
+    return 0;
 }
 
 async function document_links(url: string) {
