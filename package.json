@@ -6,10 +6,13 @@
     "@comunica/actor-init-sparql": "^1.22.0",
     "@comunica/actor-init-sparql-file": "^1.22.0",
     "commander": "^8.2.0",
+    "htmlparser2": "^7.1.2",
     "mimetype": "^0.0.8",
     "mustache": "^4.2.0",
     "n3": "^1.11.1",
     "node-fetch": "^2.6.1",
-    "solid-shell": "^2.0.6"
+    "parse-link-header": "^1.0.1",
+    "solid-shell": "^2.0.6",
+    "url-parse": "^1.5.3"
   }
 }

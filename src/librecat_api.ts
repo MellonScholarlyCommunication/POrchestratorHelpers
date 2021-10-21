@@ -13,10 +13,10 @@ if ( ! librecat_api_key) {
     process.exit(2);
 }
 
-const program  = new Command()
+const program  = new Command();
 
 program
-       .option('-m, --max <num>', 'maximum size of the list')
+       .option('-m, --max <num>', 'maximum size of the list');
 
 program.command('get id')
        .action( (id) => {
