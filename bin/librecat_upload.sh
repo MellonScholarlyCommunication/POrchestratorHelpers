@@ -16,4 +16,4 @@ node js/signposting_client.js -d get ${URL} describedBy > ${TMPFILE}
 
 node js/librecat_api.js qae ${URL} ${WEBID} ${TMPFILE}
 
-rm -r ${$TMPDIR}
+rm -r ${TMPDIR}
