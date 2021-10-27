@@ -8,11 +8,12 @@ if [[ "${URL}" == "" ]] || [[ "${WEBID}" == "" ]]; then
     exit 1
 fi
 
-TMPFILE=$(mktemp)
+TMPDIR=$(mktemp -d)
+TMPFILE=${TMPDIR}/signposting.ttl
 
 # Fetch signposting information (if it exists)
 node js/signposting_client.js -d get ${URL} describedBy > ${TMPFILE}
 
 node js/librecat_api.js qae ${URL} ${WEBID} ${TMPFILE}
 
-unlink ${TMPFILE}
+rm -r ${$TMPDIR}
