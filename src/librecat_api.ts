@@ -19,7 +19,8 @@ if ( ! librecat_api_key) {
 const program  = new Command();
 
 program
-       .option('-m, --max <num>', 'maximum size of the list');
+       .option('-m, --max <num>', 'maximum size of the list')
+       .option('-d, --demo', 'demo mode');
 
 program.command('get id')
        .action( (id) => {
@@ -118,7 +119,7 @@ async function cmd_list() {
 
     writer.end ( (error,result) => {
         console.log(result);
-    })
+    });
 }
 
 async function librecat_walker() {
@@ -252,16 +253,20 @@ async function cmd_qae(url: string, webid: string, rdfFile: string) {
         }
     };
 
-    if (typeof rdfFile !== undefined) {
+    if (typeof rdfFile !== undefined 
+        && fs.existsSync(rdfFile) && is_readable(rdfFile)) {
         jdata = await pimp_json(jdata, rdfFile);
     }
 
-    console.log(JSON.stringify(jdata));
+    if (program.opts().demo) {
+        console.log("Demo mode");
+        console.log("-------------------------------");
+        console.log(JSON.stringify(jdata));
+        return;
+    }
 
     try {
-       // const rdata = await api_post('/publication',jdata);
-       const rdata = { 'ok' : 1};
-
+        const rdata = await api_post('/publication',jdata);
         console.log(JSON.stringify(rdata));
     }
     catch( e ) {
@@ -333,4 +338,14 @@ async function api_delete(path: string) {
         });
     const jdata = await response.json();
     return jdata;
+}
+
+function is_readable(path: string): boolean {
+    try {
+        fs.accessSync(path, fs.constants.R_OK);
+        return true;
+    }
+    catch (err) {
+        return false;
+    }
 }

@@ -13,12 +13,24 @@ program
 
 program.command('list url')
         .action( async (url) => {
-            process.exitCode = await cmd_list(url);
+            try {
+                process.exitCode = await cmd_list(url);
+            }
+            catch (error) {
+                console.error(error);
+                process.exitCode = 2;
+            }
         });
 
 program.command('get url rel [type]') 
         .action( async (url,rel,type) => {
-            process.exitCode = await cmd_get(url,rel,type);
+            try {
+                process.exitCode = await cmd_get(url,rel,type);
+            }
+            catch (error) {
+                console.error(error);
+                process.exitCode = 2;
+            }
         });
 
 program.parse(process.argv);
@@ -32,13 +44,18 @@ async function cmd_list(url: string) {
 async function cmd_get(url: string, rel: string, type: string) {
     const links = await document_links(url);
 
+    if (! links && links.length == 0) {
+        console.error(`No links found`);
+        return 2;
+    }
+
     let result = links.filter( item =>  item['rel'] === rel );
 
     if (type !== undefined ) {
         result = links.filter( item => item['type'] && item['type'] === type);
     }
 
-    if (! result) {
+    if (result.length == 0) {
         console.error(`No ${rel} relator found`);
         return 2;
     }
@@ -72,10 +89,9 @@ async function cmd_get(url: string, rel: string, type: string) {
 
 async function document_links(url: string) {
     const response = await fetch(url);
+    const headers  = await response.headers;
 
-    const headers = await response.headers;
-
-    const link = headers.get('link');
+    const link        = headers.get('link');
     const contentType = headers.get('content-type');
 
     let parsed = [];
