@@ -1,0 +1,35 @@
+# Suggest an archivation when a registration announce was received
+
+PREFIX me:     <{{{me}}}>
+PREFIX ex:   <https://www.example.org/>
+PREFIX as:   <https://www.w3.org/ns/activitystreams#>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX pol:  <https://www.example.org/ns/policy#>
+PREFIX fno:  <https://w3id.org/function/ontology#>
+PREFIX log:  <http://www.w3.org/2000/10/swap/log#>
+
+{
+  [ ex:TopGraph ?id ] .
+
+  # Only listen to announce messages
+  ?id a as:Announce .
+
+  # We need an actor and a target
+  ?id as:actor ?actor .
+  ?id as:target ?target .
+
+  # Don't react to messages sent by myself... 
+  ?actor log:notEqualTo me: .
+
+  # React on announces sent to me
+  ?target log:equalTo me: .
+}
+=>
+{
+  [ pol:policy [
+      a fno:Execution ;
+      fno:executes ex:sendTarget ;
+      ex:notification ?id
+    ]
+  ].
+}.

@@ -1,5 +1,9 @@
 {
     "me"      : "https://bellow2.ugent.be/institution/bob/card.ttl#me",
+    "orchestrator" : {
+        "id"    : "https://bellow2.ugent.be/institution/o_bob/card.ttl#me",
+        "type"  : "https://www.w3.org/ns/activitystreams#Service"
+    },
     "output"  : "local/orchestrator/bob" ,
     "input"   : ["n3"] 
 }
