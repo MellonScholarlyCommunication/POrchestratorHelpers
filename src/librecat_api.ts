@@ -4,6 +4,9 @@ import *  as N3 from 'n3';
 import ns from './Namespaces'
 import { Command } from 'commander';
 
+const newEngine = require('@comunica/actor-init-sparql-file').newEngine;
+const myEngine  = newEngine();
+
 const librecat_baseurl = 'http://demo.librecat.org/api/v1';
 const librecat_front   = 'http://demo.librecat.org';
 const librecat_api_key = process.env.LIBRECAT_API_KEY;
@@ -38,9 +41,9 @@ program.command('list')
             cmd_list();
        });
 
-program.command('qae url webid')
-       .action( (url,webid) => {
-            cmd_qae(url,webid);
+program.command('qae url webid [rdf]')
+       .action( (url,webid,rdf) => {
+            cmd_qae(url,webid,rdf);
        });
 
 program.parse(process.argv);
@@ -157,7 +160,71 @@ async function cmd_get(id: string) {
     console.log(JSON.stringify(jdata));
 }
 
-async function cmd_qae(url: string, webid: string) {
+async function pimp_json(json:any, rdfFile: string) {
+    const binding = await sparqlQuery(rdfFile, `
+        PREFIX foaf: <http://xmlns.com/foaf/0.1/> 
+        PREFIX dcterms: <http://purl.org/dc/terms/> 
+        PREFIX bibo: <http://purl.org/ontology/bibo/> 
+
+        SELECT ?title ?firstName  ?lastName  ?fullName ?abstract {
+            OPTIONAL { ?s dcterms:title ?title } .
+            OPTIONAL { ?s foaf:name ?fullName } .
+            OPTIONAL { ?s foaf:givenname ?firstName } .
+            OPTIONAL { ?s foaf:surname ?lastName } . 
+            OPTIONAL { ?s bibo:abstract ?abstract } .
+        }
+    `);
+
+    const title     = maybeValue(binding[0],'?title');
+    const fullName  = maybeValue(binding[0],'?fullName');
+    const firstName = maybeValue(binding[0],'?firstName');
+    const lastName  = maybeValue(binding[0],'?lastName');
+    const abstract  = maybeValue(binding[0],'?abstract');
+
+    if (title) {
+        json.data.attributes.title = title;
+    }
+
+    if (fullName) {
+        json.data.attributes.author[0].full_name = fullName;
+    }
+
+    if (firstName) {
+        json.data.attributes.author[0].first_name = firstName;
+    }
+
+    if (lastName) {
+        json.data.attributes.author[0].last_name = lastName;
+    }
+
+    if (abstract) {
+        json.data.attributes.abstract = [ { text: abstract , lang: 'eng' } ];
+    }
+
+    return json;
+}
+
+async function sparqlQuery(source, query) {
+    const result = await myEngine.query(
+                            query, { 
+                            sources: [source]
+                   });
+
+    const bindings = await result.bindings();
+
+    return bindings;
+}
+
+function maybeValue(binding, key) {
+    if (binding.has(key)) {
+        return binding.get(key).value;
+    } 
+    else {
+        return undefined;
+    }
+}
+
+async function cmd_qae(url: string, webid: string, rdfFile: string) {
     let jdata = {
         "data" : {
             "attributes" : {
@@ -178,15 +245,22 @@ async function cmd_qae(url: string, webid: string) {
                 "oa": "1",
                 "status" : "private" ,
                 "title" : `Quick and easy for - ${url}`,
-                "type" : "journal_article",
+                "type" : "preprint",
                 "user_id" : 1234 
             } ,
             "type" : "publication"
         }
     };
 
+    if (typeof rdfFile !== undefined) {
+        jdata = await pimp_json(jdata, rdfFile);
+    }
+
+    console.log(JSON.stringify(jdata));
+
     try {
-        const rdata = await api_post('/publication',jdata);
+       // const rdata = await api_post('/publication',jdata);
+       const rdata = { 'ok' : 1};
 
         console.log(JSON.stringify(rdata));
     }
