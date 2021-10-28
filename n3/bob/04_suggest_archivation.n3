@@ -46,11 +46,11 @@ PREFIX ex:   <https://www.example.org/>
             as:inReplyTo ?id ;
             as:actor     me: ;
             as:origin    <{{{orchestrator.id}}}> ;
-            as:target    ?actor;
+            as:target    ?target;
             as:object    [
               a as:Note ;
               as:summary "Suggestion to archive your artefact" ;
-              as:content "Your artefact was registered, you could to an archivation as next step" 
+              as:content "Your artefact was registered, you could do an archivation as next step" 
             ]
       ]
     ]
