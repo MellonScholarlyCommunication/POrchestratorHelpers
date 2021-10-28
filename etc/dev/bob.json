@@ -2,7 +2,8 @@
     "me"      : "http://localhost:2000/bob/card.ttl#me",
     "orchestrator" : {
         "id"    : "https://localhost:2000/o_bob/card.ttl#me",
-        "type"  : "https://www.w3.org/ns/activitystreams#Service"
+        "type"  : "https://www.w3.org/ns/activitystreams#Service" ,
+        "inbox" : "https://localhost:2000/o_bob/inbox"
     },
     "output"  : "local/orchestrator/bob" ,
     "input"   : ["n3","n3/bob"] 

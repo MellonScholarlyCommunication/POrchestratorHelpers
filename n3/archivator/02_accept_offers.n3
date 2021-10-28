@@ -42,6 +42,7 @@ PREFIX list: <http://www.w3.org/2000/10/swap/list#>
       fno:executes ex:sendOrigin ;
       ex:notification [
             a as:Accept ;
+            a ex:ArchivationAction ;
             as:inReplyTo ?id ;
             as:actor     me: ;
             as:origin    <{{{orchestrator.id}}}> ;
@@ -58,6 +59,7 @@ PREFIX list: <http://www.w3.org/2000/10/swap/list#>
       fno:executes ex:sendTarget ;
       ex:notification [
             a as:Offer ;
+            a ex:ArchivationAction ;
             as:inReplyTo ?id ;
             as:actor     me: ;
             as:origin    <{{{orchestrator.id}}}> ;

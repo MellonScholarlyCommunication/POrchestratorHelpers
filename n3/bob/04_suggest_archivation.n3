@@ -1,18 +1,25 @@
 # Suggest an archivation when a registration announce was received
 
-PREFIX me:     <{{{me}}}>
+PREFIX me:   <{{{me}}}>
 PREFIX ex:   <https://www.example.org/>
 PREFIX as:   <https://www.w3.org/ns/activitystreams#>
 PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX pol:  <https://www.example.org/ns/policy#>
 PREFIX fno:  <https://w3id.org/function/ontology#>
 PREFIX log:  <http://www.w3.org/2000/10/swap/log#>
+PREFIX ldp:  <http://www.w3.org/ns/ldp#>
+PREFIX ex:   <https://www.example.org/>
+
+# Define the location of my own inbox
+<{{{orchestrator.id}}}> a <{{{orchestrator.type}}}> .
+<{{{orchestrator.id}}}> ldp:inbox <{{{orchestrator.inbox}}}> .
 
 {
   [ ex:TopGraph ?id ] .
 
   # Only listen to announce messages
   ?id a as:Announce .
+  ?id a ex:RegistrationAction .
 
   # We need an actor and a target
   ?id as:actor ?actor .
@@ -21,15 +28,31 @@ PREFIX log:  <http://www.w3.org/2000/10/swap/log#>
   # Don't react to messages sent by myself... 
   ?actor log:notEqualTo me: .
 
+  # Don't react on messages sent by my orchestrator...
+  ?actor log:notEqualTo <{{{orchestrator.id}}}> .
+
   # React on announces sent to me
   ?target log:equalTo me: .
 }
 =>
 {
+  # Send a notification to my own inbox, so that it can be picked up
+  # by the forwarding rules and event log processing
   [ pol:policy [
       a fno:Execution ;
-      fno:executes ex:sendTarget ;
-      ex:notification ?id
+      fno:executes ex:sendOrigin ;
+      ex:notification [
+            a as:Create ;
+            as:inReplyTo ?id ;
+            as:actor     me: ;
+            as:origin    <{{{orchestrator.id}}}> ;
+            as:target    ?actor;
+            as:object    [
+              a as:Note ;
+              as:summary "Suggestion to archive your artefact" ;
+              as:content "Your artefact was registered, you could to an archivation as next step" 
+            ]
+      ]
     ]
   ].
 }.
