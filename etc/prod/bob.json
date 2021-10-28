@@ -6,5 +6,5 @@
         "inbox" : "https://bellow2.ugent.be/institution/o_bob/inbox"
     },
     "output"  : "local/orchestrator/bob" ,
-    "input"   : ["n3"] 
+    "input"   : ["n3", "n3/bob"] 
 }
