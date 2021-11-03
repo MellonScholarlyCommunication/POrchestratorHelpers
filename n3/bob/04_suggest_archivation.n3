@@ -40,7 +40,7 @@ PREFIX ex:   <https://www.example.org/>
   # by the forwarding rules and event log processing
   [ pol:policy [
       a fno:Execution ;
-      fno:executes ex:sendOrigin ;
+      fno:executes ex:sendTarget ;
       ex:notification [
             a as:Create ;
             as:inReplyTo ?id ;
