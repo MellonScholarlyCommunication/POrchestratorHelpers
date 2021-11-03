@@ -10,7 +10,7 @@ PREFIX log:  <http://www.w3.org/2000/10/swap/log#>
 PREFIX ldp:  <http://www.w3.org/ns/ldp#>
 PREFIX ex:   <https://www.example.org/>
 
-# Define the location of my own inbox
+# Define the location of my orchestrator inbox
 <{{{orchestrator.id}}}> a <{{{orchestrator.type}}}> .
 <{{{orchestrator.id}}}> ldp:inbox <{{{orchestrator.inbox}}}> .
 
@@ -28,7 +28,7 @@ PREFIX ex:   <https://www.example.org/>
   # Don't react to messages sent by myself... 
   ?actor log:notEqualTo me: .
 
-  # Don't react on messages sent by my orchestrator...
+  # Don't react on messages sent by my own orchestrator...
   ?actor log:notEqualTo <{{{orchestrator.id}}}> .
 
   # React on announces sent to me

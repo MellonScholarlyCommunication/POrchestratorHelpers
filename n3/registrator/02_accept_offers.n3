@@ -1,4 +1,5 @@
 # Send an Accept when we get an offer
+# Forward the notification to my Librecat registration service
 
 PREFIX me:   <{{{me}}}>
 PREFIX ex:   <https://www.example.org/>
@@ -10,7 +11,7 @@ PREFIX fno:  <https://w3id.org/function/ontology#>
 PREFIX log:  <http://www.w3.org/2000/10/swap/log#>
 PREFIX list: <http://www.w3.org/2000/10/swap/list#>
 
-# Define the location of my own inbox
+# Define the location of my orchestrator inbox
 <{{{orchestrator.id}}}> a <{{{orchestrator.type}}}> .
 <{{{orchestrator.id}}}> ldp:inbox <{{{orchestrator.inbox}}}> .
 
