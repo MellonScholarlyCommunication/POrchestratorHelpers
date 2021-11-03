@@ -44,7 +44,7 @@ PREFIX ex:   <https://www.example.org/>
       ex:notification [
             a as:Create ;
             as:inReplyTo ?id ;
-            as:actor     me: ;
+            as:actor     <{{{orchestrator.id}}}> ;
             as:origin    <{{{orchestrator.id}}}> ;
             as:target    ?target;
             as:object    [
