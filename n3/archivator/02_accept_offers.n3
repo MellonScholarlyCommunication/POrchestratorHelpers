@@ -67,6 +67,13 @@ PREFIX list: <http://www.w3.org/2000/10/swap/list#>
             as:target    <{{{robustlinks.id}}}> ;
             as:context   ?object ;
             as:object    ?id ;
+
+            # In this internal communication we need four actors instead of three
+            #  - The Archivation Hub itself (this will be the actor that will send responses)
+            #  - The Orchestrator (this is the actor that forwards this notification)
+            #  - The Target (this is the backend Service Hub that will execute the registration)
+            #  - The original Actor (where we send the responses to)
+            # This original actor will be set as as:audience
             as:audience  ?actor        
       ]
     ]
