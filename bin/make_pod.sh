@@ -20,7 +20,7 @@ touch ${BASE}/${NAME}/artefacts/.gitignore
 
 cat > ${BASE}/${NAME}/card.ttl <<EOF
 @prefix : <#>.
-@prefix as: <http://www.w3.org/ns/activitystreams#>.
+@prefix as: <https://www.w3.org/ns/activitystreams#>.
 @prefix ex: <https://www.example.org/>.
 
 :me 
@@ -39,7 +39,7 @@ touch ${BASE}/o_${NAME}/inbox/.gitignore
 
 cat > ${BASE}/o_${NAME}/card.ttl <<EOF
 @prefix : <#>.
-@prefix as: <http://www.w3.org/ns/activitystreams#>.
+@prefix as: <https://www.w3.org/ns/activitystreams#>.
 
 :me 
     a         as:Service ;

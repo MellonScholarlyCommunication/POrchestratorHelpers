@@ -1,6 +1,6 @@
 @prefix foaf: <http://xmlns.com/foaf/0.1/>.
 @prefix solid: <http://www.w3.org/ns/solid/terms#>.
-@prefix as: <http://www.w3.org/ns/activitystreams#>.
+@prefix as: <https://www.w3.org/ns/activitystreams#>.
 @prefix ex: <https://www.example.org/>.
 
 <https://hochstenbach.inrupt.net/archivator/profile/orchestrator.ttl#me>

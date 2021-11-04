@@ -1,5 +1,5 @@
 @prefix : <#>.
-@prefix as: <http://www.w3.org/ns/activitystreams#>.
+@prefix as: <https://www.w3.org/ns/activitystreams#>.
 
 :me 
     a         as:Service ;
