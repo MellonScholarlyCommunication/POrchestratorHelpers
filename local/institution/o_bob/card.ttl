@@ -5,5 +5,4 @@
 :me 
     a         as:Service ;
     as:name   "bob's orchestrator" ;
-    ldp:inbox <inbox/> ;
-    as:inbox  <inbox/> .
+    ldp:inbox <inbox/>.

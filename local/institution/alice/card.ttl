@@ -7,7 +7,6 @@
     a         as:Person ;
     as:name   "alice" ;
     ldp:inbox <inbox/> ;
-    as:inbox  <inbox/> ;
     as:outbox <events/> ;
     ex:artefacts <artefacts> ;
     ex:orchestrator <../o_alice/card.ttl#me> .
