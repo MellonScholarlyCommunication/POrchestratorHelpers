@@ -1,11 +1,13 @@
 @prefix : <#>.
 @prefix as: <https://www.w3.org/ns/activitystreams#>.
+@prefix ldp: <http://www.w3.org/ns/ldp#>.
 @prefix ex: <https://www.example.org/>.
 
 :me 
     a         as:Person ;
     as:name   "bob" ;
-    as:inbox  <inbox> ;
-    as:outbox <events> ;
+    ldp:inbox <inbox/> ;
+    as:inbox  <inbox/> ;
+    as:outbox <events/> ;
     ex:artefacts <artefacts.ttl> ;
     ex:orchestrator <../o_bob/card.ttl#me> .

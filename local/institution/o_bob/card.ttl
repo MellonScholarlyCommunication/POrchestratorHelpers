@@ -1,7 +1,9 @@
 @prefix : <#>.
 @prefix as: <https://www.w3.org/ns/activitystreams#>.
+@prefix ldp: <http://www.w3.org/ns/ldp#>.
 
 :me 
     a         as:Service ;
     as:name   "bob's orchestrator" ;
-    as:inbox  <inbox> .
+    ldp:inbox <inbox/> ;
+    as:inbox  <inbox/> .
