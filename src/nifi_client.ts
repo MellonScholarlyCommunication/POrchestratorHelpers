@@ -1,7 +1,6 @@
 import fetch from 'node-fetch';
 import { Command } from 'commander';
 import * as fs from "fs";
-import { group } from 'console';
 
 const FormData = require('form-data');
 
@@ -9,88 +8,158 @@ const X_OFFSET  = 400;
 const Y_OFFSET  = 200;
 const MAX_SLOTS = 100;
 
-const baseUrl = 'http://localhost:8080/nifi-api'; 
+const apiUrl  = 'http://localhost:8080/nifi-api';
 const program = new Command();
 
-program.option('-b,--baseurl','baseurl');
+const exitCode = main();
 
-program.command('list-templates')
-       .action( async () => {
-           const res = await list_templates();
-           console.log(JSON.stringify(res));
-       });
+exitCode.then( i => process.exit(i));
 
-program.command('list-process-groups [id]')
-       .action( async (id) => {
-           const res = await list_process_groups(id);
-           console.log(JSON.stringify(res));
-       });
+async function main() {
+    let exitCode = 0;
 
-program.command('count-process-groups [id]')
-       .action( async (id) => {
-            const res = await count_process_group(id);
-            console.log(res);
-       });
+    program.option('-a,--api','api url')
+           .option('-r,--root <root>','root process node');
 
-program.command('create-process-group id template')
-       .action( async (id,template) => {
-           const res = await create_process_group(id,template);
-           console.log(JSON.stringify(res));
-       });
+    program.command('list-templates')
+        .action( async () => {
+            const res = await list_templates();
 
-program.command('delete-process-group root id')
-       .action( async (root,id) => {
+            if (!res) {
+                exitCode = 2;
+            }
+
+            console.log(JSON.stringify(res));
+        });
+
+    program.command('list-process-groups [id]')
+        .action( async (id) => {
+            const res = await list_process_groups(id);
+
+            if (!res) {
+                exitCode = 3;
+            }
+
+            console.log(JSON.stringify(res));
+        });
+
+    program.command('count-process-groups [id]')
+        .action( async (id) => {
+             const res = await count_process_group(id);
+
+             if (!res) {
+                 exitCode = 4;
+             }
+
+             console.log(res);
+        });
+
+    program.command('create-process-group template')
+        .action( async (template) => {
+            const res = await create_process_group(null,template);
+
+            if (! res) {
+                exitCode = 5;
+            }
+
+            console.log(JSON.stringify(res));
+        });
+
+    program.command('delete-process-group root id')
+        .action( async (root,id) => {
             const res = await delete_process_group(root,id);
+
+            if (! res) {
+                exitCode = 6;
+            }
+
             console.log(JSON.stringify(res));
-       });
+        });
 
-program.command('get-process-group [id]')
-       .action( async (id) => {
-           const res = await get_process_group(id);
-           console.log(JSON.stringify(res));
-       });
+    program.command('get-process-group [id]')
+        .action( async (id) => {
+            const res = await get_process_group(id);
 
-program.command('status id') 
-       .action( async (id) => {
-           const res = await get_status(id);
-           console.log(JSON.stringify(res));
-       });
+            if (! res) {
+                exitCode = 7;
+            }
 
-program.command('stop id') 
-       .action( async (id) => {
+            console.log(JSON.stringify(res));
+        });
+
+    program.command('status id') 
+        .action( async (id) => {
+            const res = await get_status(id);
+
+            if (! res) {
+                exitCode = 8;
+            }
+
+            console.log(JSON.stringify(res));
+        });
+
+    program.command('stop id') 
+        .action( async (id) => {
             const res = await startstop_process_group(id,'STOPPED');
-            console.log(JSON.stringify(res));
-       });
 
-program.command('start id') 
-       .action( async (id) => {
+            if (! res) {
+                exitCode = 9;
+            }
+
+            console.log(JSON.stringify(res));
+        });
+
+    program.command('start id') 
+        .action( async (id) => {
             const res = await startstop_process_group(id,'RUNNING');
+
+            if (! res) {
+                exitCode = 10;
+            }
+
             console.log(JSON.stringify(res));
-       });
+        });
 
-program.command('get-variables id')
-       .action( async (id) => {
+    program.command('get-variables id')
+        .action( async (id) => {
             const group = await get_process_group(id);
-            console.log(JSON.stringify(group['variables']));
-       });
 
-program.command('set-variables id file') 
-       .action( async (id,file) => {
+            if (! group) {
+                exitCode = 11;
+            }
+
+            console.log(JSON.stringify(group['variables']));
+        });
+
+    program.command('set-variables id file') 
+        .action( async (id,file) => {
             const jsonData = fs.readFileSync(file, { encoding: 'utf8', flag: 'r'});
             const res = await set_variables(id,JSON.parse(jsonData));
-            console.log(JSON.stringify(res));
-       });
 
-program.command('set-name id name')
-       .action( async (id,name) =>{
+            if (! res) {
+                exitCode = 12;
+            }
+
+            console.log(JSON.stringify(res));
+        });
+
+    program.command('set-name id name')
+        .action( async (id,name) =>{
             const res = await set_name(id,name);
-            console.log(JSON.stringify(res));
-       });
 
-program.parse(process.argv);
+            if (! res) {
+                exitCode = 13;
+            }
+            console.log(JSON.stringify(res));
+        });
+
+    await program.parseAsync(process.argv);
+
+    return exitCode;
+}
 
 async function list_templates() {
-    const base = program.opts().baseurl || baseUrl;
+    const base = program.opts().api || apiUrl;
 
     const response = await fetch(`${base}/resources`);
 
@@ -108,12 +177,16 @@ async function list_templates() {
 }
 
 async function list_process_groups(id:string = "root") {
-    const base = program.opts().baseurl || baseUrl;
+    const base = program.opts().api || apiUrl;
+    const root = program.opts().root;
 
-    const response = await fetch(`${base}/process-groups/${id}/process-groups`);
+    const parentId = typeof root === 'undefined' ? id : root;
+
+    const response = await fetch(`${base}/process-groups/${parentId}/process-groups`);
 
     if (! response.ok) {
-        return null;
+        console.error(await response.text());
+        return [];
     }
 
     const data = await response.json();
@@ -135,28 +208,13 @@ async function list_process_groups(id:string = "root") {
 }
 
 async function get_process_group(id:string="root") {
-    const base = program.opts().baseurl || baseUrl;
+    const groups = await list_process_groups(id);
 
-    const response = await fetch(`${base}/process-groups/${id}`);
-
-    if (! response.ok) {
+    if (groups.length == 0) {
         return null;
     }
 
-    const data = await response.json();
-
-    const group = {
-        id: data['id'] ,
-        name: data['component']['name'],
-        comments: data['component']['comments'],
-        running: data['runningCount'],
-        stopped: data['stoppedCount'],
-        disabled: data['disabledCount'],
-        variables: data['component']['variables'] ,
-        version: data['revision']['version'] ,
-    };
-
-    return group;
+    return groups.filter( group => group.id === id)[0];
 }
 
 async function get_status(id:string="root") {
@@ -167,10 +225,10 @@ async function get_status(id:string="root") {
     }
 
     if (group['running'] > 0) {
-        return 'RUNNING';
+        return { status: 'RUNNING'};
     }
     else {
-        return 'STOPPED';
+        return { status: 'STOPPED'};
     }
 }
 
@@ -178,13 +236,10 @@ async function startstop_process_group(id:string,state:string) {
     const group = await get_status(id); 
 
     if (! group) {
-        return { 
-            status: "error" ,
-            message: "no such group"
-        };
+        return null;
     }
 
-    const base = program.opts().baseurl || baseUrl; 
+    const base = program.opts().api || apiUrl; 
 
     const response = await fetch(`${base}/flow/process-groups/${id}`, {
         method: 'PUT',
@@ -213,7 +268,7 @@ async function startstop_process_group(id:string,state:string) {
 }
 
 async function set_variables(id:string, variables:any) {
-    const base = program.opts().baseurl || baseUrl; 
+    const base = program.opts().api || apiUrl; 
 
     const response = await fetch(`${base}/process-groups/${id}/variable-registry`);
 
@@ -312,8 +367,12 @@ async function find_free_slot(id:string) {
     return slots.values().next().value;
 }
 
-async function create_process_group(id:string,template:string) {
-    const nextSlot = await find_free_slot(id);
+async function create_process_group(id:string="root",template:string) {
+    const root = program.opts().root;
+
+    const parentId = typeof root === 'undefined' ? id : root;
+
+    const nextSlot = await find_free_slot(parentId);
 
     if (nextSlot === null) {
         return {
@@ -322,7 +381,7 @@ async function create_process_group(id:string,template:string) {
         }
     }
 
-    const base = program.opts().baseurl || baseUrl; 
+    const base = program.opts().apiUrl || apiUrl; 
 
     const origin_x = Math.trunc( nextSlot % 5 ) * X_OFFSET;
     const origin_y = Math.trunc( nextSlot / 5 ) * Y_OFFSET;
@@ -368,7 +427,7 @@ async function create_process_group(id:string,template:string) {
 }
 
 async function set_name(id:string,name:string) {
-    const base = program.opts().baseurl || baseUrl; 
+    const base = program.opts().api || apiUrl; 
 
     const group = await get_process_group(id);
 
@@ -408,7 +467,7 @@ async function set_name(id:string,name:string) {
 }
 
 async function delete_process_group(root:string,id:string) {
-    const base = program.opts().baseurl || baseUrl; 
+    const base = program.opts().api || apiUrl; 
 
     const groupList = await list_process_groups(root);
 
