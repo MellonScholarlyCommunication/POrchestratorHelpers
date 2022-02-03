@@ -8,6 +8,7 @@ A collection of Groocy and Nifi scripts required for the demonstrator
 - [Groovy](http://www.groovy-lang.org) - `brew install groovy`
 - [TypeScript](https://www.typescriptlang.org) - `npm install -g typescript`
 - [POrchestrator](https://github.com/MellonScholarlyCommunication/POrchestrator) - Prolog orchestrator
+- [JQ](https://stedolan.github.io/jq/) - `brew install jq`
 
 # Install
 
