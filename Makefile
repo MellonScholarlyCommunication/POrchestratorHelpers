@@ -21,10 +21,10 @@ usage:
 	@echo "    registrator-clean"
 
 compile:
-	tsc
+	npx tsc
 
 watch:
-	tsc -w
+	npx tsc -w
 
 rules:
 	bin/make_rules.sh
