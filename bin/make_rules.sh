@@ -2,11 +2,17 @@
 
 environment="prod"
 names=(alice bob registrator archivator)
+
 if [ -f DEVELOPMENT ]; then
-    environment="dev"
+    if [ -s DEVELOPMENT ]; then
+      environment=$(cat DEVELOPMENT)
+    else
+      environment="dev"
+    fi
 fi
 
 echo "[${environment}]"
+exit 0
 for name in "${names[@]}"; do
 
     if [ ! -e etc/${environment}/${name}.json ]; then
