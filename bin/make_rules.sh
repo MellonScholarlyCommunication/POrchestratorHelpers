@@ -12,7 +12,7 @@ if [ -f DEVELOPMENT ]; then
 fi
 
 echo "[${environment}]"
-exit 0
+
 for name in "${names[@]}"; do
 
     if [ ! -e etc/${environment}/${name}.json ]; then
