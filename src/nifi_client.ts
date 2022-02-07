@@ -2,7 +2,8 @@ import fetch from 'node-fetch';
 import { Command } from 'commander';
 import * as fs from "fs";
 
-const FormData = require('form-data');
+// Ignore nifi default self-signed certificates
+process.env.NODE_TLS_REJECT_UNAUTHORIZED="0";
 
 const X_OFFSET  = 400;
 const Y_OFFSET  = 200;
@@ -18,9 +19,21 @@ exitCode.then( i => process.exit(i));
 async function main() {
     let exitCode = 0;
 
-    program.option('-a,--api','api url')
+    program.option('-a,--api <api>','api url')
            .option('-b,--base <base>','base url')
+           .option('-j,--jwt <jwt>','jwt token')
            .option('-r,--root <root>','root process node');
+
+    program.command('login username password')
+        .action( async(username,password) => {
+            const res = await login(username,password);
+
+            if (!res) {
+                exitCode = 2;
+            }
+
+            console.log(res); 
+        });
 
     program.command('list-templates')
         .action( async () => {
@@ -165,10 +178,55 @@ async function main() {
     return exitCode;
 }
 
-async function list_templates() {
+function jwt_token() {
+    const jwt_file = program.opts().jwt;
+
+    if (! jwt_file || ! fs.existsSync(jwt_file)) {
+        return null;
+    }
+
+    const jwt = fs.readFileSync(jwt_file,{ encoding: 'utf8', flag: 'r'}).replace(/\n/g,'');
+
+    if (jwt.length === 0) {
+        return null;
+    }
+    else {
+        return jwt;
+    }
+}
+
+async function login(username:string, password: string) {
     const base = program.opts().api || apiUrl;
 
-    const response = await fetch(`${base}/resources`);
+    const response = await fetch(`${base}/access/token`,{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `username=${username}&password=${password}` 
+    });
+    
+    if (! response.ok) {
+        return null;
+    } 
+
+    const jwt = await response.text();
+
+    return jwt;
+}
+
+async function list_templates() {
+    const base = program.opts().api || apiUrl;
+    const jwt     = jwt_token();
+    const headers = {};
+
+    if (jwt) {
+        headers['Authorization'] = `Bearer ${jwt}`;
+    }
+
+    const response = await fetch(`${base}/resources` , {
+        headers: headers
+    });
 
     if (! response.ok) {
         return null;
@@ -187,10 +245,18 @@ async function list_process_groups(id:string = "root") {
     const base  = program.opts().api || apiUrl;
     const xbase = program.opts().base;
     const root  = program.opts().root;
+    const jwt     = jwt_token();
+    const headers = {};
+
+    if (jwt) {
+        headers['Authorization'] = `Bearer ${jwt}`;
+    }
 
     const parentId = typeof root === 'undefined' ? id : root;
 
-    const response = await fetch(`${base}/process-groups/${parentId}/process-groups`);
+    const response = await fetch(`${base}/process-groups/${parentId}/process-groups` , {
+        headers: headers
+    });
 
     if (! response.ok) {
         console.error(await response.text());
@@ -225,7 +291,9 @@ async function list_process_groups(id:string = "root") {
 }
 
 async function get_process_group(id:string="root") {
-    const groups = await list_process_groups(id);
+    const root  = program.opts().root || 'root';
+
+    const groups = await list_process_groups(root);
 
     if (groups.length == 0) {
         return null;
@@ -250,19 +318,25 @@ async function get_status(id:string="root") {
 }
 
 async function startstop_process_group(id:string,state:string) {
+    const base = program.opts().api || apiUrl; 
+    const jwt     = jwt_token();
+    const headers = {
+        'Content-Type': 'application/json' 
+    };
+
+    if (jwt) {
+        headers['Authorization'] = `Bearer ${jwt}`;
+    }
+
     const group = await get_status(id); 
 
     if (! group) {
         return null;
     }
 
-    const base = program.opts().api || apiUrl; 
-
     const response = await fetch(`${base}/flow/process-groups/${id}`, {
         method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        } ,
+        headers: headers,
         body: JSON.stringify({
             id: id ,
             state: state
@@ -286,8 +360,18 @@ async function startstop_process_group(id:string,state:string) {
 
 async function set_variables(id:string, variables:any) {
     const base = program.opts().api || apiUrl; 
+    const jwt     = jwt_token();
+    const headers = {
+        'Content-Type': 'application/json' 
+    };
 
-    const response = await fetch(`${base}/process-groups/${id}/variable-registry`);
+    if (jwt) {
+        headers['Authorization'] = `Bearer ${jwt}`;
+    }
+
+    const response = await fetch(`${base}/process-groups/${id}/variable-registry`, {
+        headers: headers
+    });
 
     if (! response.ok) {
         return null;
@@ -318,11 +402,11 @@ async function set_variables(id:string, variables:any) {
         }
     };
 
+    headers['Content-Type'] = 'application/json';
+
     const update_response = await fetch(`${base}/process-groups/${id}/variable-registry/update-requests`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        } ,
+        headers: headers,
         body: JSON.stringify(updateRequest)
     });
 
@@ -386,6 +470,14 @@ async function find_free_slot(id:string) {
 
 async function create_process_group(id:string="root",template:string) {
     const root = program.opts().root;
+    const jwt     = jwt_token();
+    const headers = {
+        'Content-Type': 'application/json' 
+    };
+
+    if (jwt) {
+        headers['Authorization'] = `Bearer ${jwt}`;
+    }
 
     const parentId = typeof root === 'undefined' ? id : root;
 
@@ -405,9 +497,7 @@ async function create_process_group(id:string="root",template:string) {
 
     const response = await fetch(`${base}/process-groups/${parentId}/template-instance`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        } ,
+        headers: headers ,
         body: JSON.stringify({
             originX: origin_x ,
             originY: origin_y ,
@@ -445,6 +535,14 @@ async function create_process_group(id:string="root",template:string) {
 
 async function set_name(id:string,name:string) {
     const base = program.opts().api || apiUrl; 
+    const jwt     = jwt_token();
+    const headers = {
+        'Content-Type': 'application/json' 
+    };
+
+    if (jwt) {
+        headers['Authorization'] = `Bearer ${jwt}`;
+    }
 
     const group = await get_process_group(id);
 
@@ -454,9 +552,7 @@ async function set_name(id:string,name:string) {
 
     const response = await fetch(`${base}/process-groups/${id}`, {
         method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        } ,
+        headers: headers, 
         body: JSON.stringify({
             revision: {
                 version: group['version']
@@ -485,6 +581,14 @@ async function set_name(id:string,name:string) {
 
 async function delete_process_group(root:string,id:string) {
     const base = program.opts().api || apiUrl; 
+    const jwt     = jwt_token();
+    const headers = {
+        'Content-Type': 'application/json' 
+    };
+
+    if (jwt) {
+        headers['Authorization'] = `Bearer ${jwt}`;
+    }
 
     const groupList = await list_process_groups(root);
 
@@ -497,7 +601,8 @@ async function delete_process_group(root:string,id:string) {
     const version  = deleteGroup[0]['version'];
 
     const response = await fetch(`${base}/process-groups/${id}?version=${version}` , {
-        method: 'DELETE'
+        method: 'DELETE' ,
+        headers: headers
     });
 
     if (! response.ok ) {
