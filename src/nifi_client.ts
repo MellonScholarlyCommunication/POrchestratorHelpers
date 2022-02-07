@@ -19,6 +19,7 @@ async function main() {
     let exitCode = 0;
 
     program.option('-a,--api','api url')
+           .option('-b,--base <base>','base url')
            .option('-r,--root <root>','root process node');
 
     program.command('list-templates')
@@ -133,8 +134,14 @@ async function main() {
 
     program.command('set-variables id file') 
         .action( async (id,file) => {
-            const jsonData = fs.readFileSync(file, { encoding: 'utf8', flag: 'r'});
-            const res = await set_variables(id,JSON.parse(jsonData));
+            const fileOrStdin = file === '-' ? '/dev/stdin' : file;
+            const jsonData = fs.readFileSync(fileOrStdin, { encoding: 'utf8', flag: 'r'});
+            const data = JSON.parse(jsonData);
+
+            // The slot.id is the only key we don't want to see
+            delete data['slot.id'];
+
+            const res = await set_variables(id,data);
 
             if (! res) {
                 exitCode = 12;
@@ -173,12 +180,13 @@ async function list_templates() {
         return res['identifier'].startsWith("/template");
     });
 
-    return templates;
+    return { "templates" : templates };
 }
 
 async function list_process_groups(id:string = "root") {
-    const base = program.opts().api || apiUrl;
-    const root = program.opts().root;
+    const base  = program.opts().api || apiUrl;
+    const xbase = program.opts().base;
+    const root  = program.opts().root;
 
     const parentId = typeof root === 'undefined' ? id : root;
 
@@ -192,6 +200,14 @@ async function list_process_groups(id:string = "root") {
     const data = await response.json();
 
     const groups = data['processGroups'].map( group => {
+        const meta = {};
+
+        if (xbase) {
+            meta['record'] = `${xbase}/${group['id']}`;
+            meta['status'] = `${xbase}/${group['id']}/status`;
+            meta['variables'] = `${xbase}/${group['id']}/variables`;
+        }
+
         return {
             id: group['id'] ,
             name: group['component']['name'],
@@ -200,7 +216,8 @@ async function list_process_groups(id:string = "root") {
             stopped: group['stoppedCount'],
             disabled: group['disabledCount'],
             variables: group['component']['variables'],
-            version: group['revision']['version'] 
+            version: group['revision']['version'] ,
+            meta: meta
         };
     });
 
@@ -386,7 +403,7 @@ async function create_process_group(id:string="root",template:string) {
     const origin_x = Math.trunc( nextSlot % 5 ) * X_OFFSET;
     const origin_y = Math.trunc( nextSlot / 5 ) * Y_OFFSET;
 
-    const response = await fetch(`${base}/process-groups/${id}/template-instance`, {
+    const response = await fetch(`${base}/process-groups/${parentId}/template-instance`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
