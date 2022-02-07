@@ -16,10 +16,19 @@ const exitCode = main();
 
 exitCode.then( i => process.exit(i));
 
+interface IOption {
+    config: string;
+    api: string;
+    base: string;
+    jwt: string;
+    root: string;
+};
+
 async function main() {
     let exitCode = 0;
 
-    program.option('-a,--api <api>','api url')
+    program.option('-c,--config <config>','config')
+           .option('-a,--api <api>','api url')
            .option('-b,--base <base>','base url')
            .option('-j,--jwt <jwt>','jwt token')
            .option('-r,--root <root>','root process node');
@@ -178,8 +187,26 @@ async function main() {
     return exitCode;
 }
 
+function options() : IOption {
+    let options: IOption;
+
+    const config  = program.opts().config;
+
+    if (config) {
+        const json = fs.readFileSync(config, { encoding: 'utf8', flag: 'r'});
+        const data = JSON.parse(json);
+        options = data;
+    }
+
+    const other : IOption = program.opts();
+
+    options = { ...options , ...other };
+
+    return options;
+}
+
 function jwt_token() {
-    const jwt_file = program.opts().jwt;
+    const jwt_file = options().jwt;
 
     if (! jwt_file || ! fs.existsSync(jwt_file)) {
         return null;
@@ -196,7 +223,7 @@ function jwt_token() {
 }
 
 async function login(username:string, password: string) {
-    const base = program.opts().api || apiUrl;
+    const base = options().api || apiUrl;
 
     const response = await fetch(`${base}/access/token`,{
         method: 'POST',
@@ -216,7 +243,7 @@ async function login(username:string, password: string) {
 }
 
 async function list_templates() {
-    const base = program.opts().api || apiUrl;
+    const base    = options().api || apiUrl;
     const jwt     = jwt_token();
     const headers = {};
 
@@ -242,9 +269,9 @@ async function list_templates() {
 }
 
 async function list_process_groups(id:string = "root") {
-    const base  = program.opts().api || apiUrl;
-    const xbase = program.opts().base;
-    const root  = program.opts().root;
+    const base    = options().api || apiUrl;
+    const xbase   = options().base;
+    const root    = options().root;
     const jwt     = jwt_token();
     const headers = {};
 
@@ -291,7 +318,7 @@ async function list_process_groups(id:string = "root") {
 }
 
 async function get_process_group(id:string="root") {
-    const root  = program.opts().root || 'root';
+    const root = options().root || 'root';
 
     const groups = await list_process_groups(root);
 
@@ -318,7 +345,7 @@ async function get_status(id:string="root") {
 }
 
 async function startstop_process_group(id:string,state:string) {
-    const base = program.opts().api || apiUrl; 
+    const base    = options().api || apiUrl; 
     const jwt     = jwt_token();
     const headers = {
         'Content-Type': 'application/json' 
@@ -359,7 +386,7 @@ async function startstop_process_group(id:string,state:string) {
 }
 
 async function set_variables(id:string, variables:any) {
-    const base = program.opts().api || apiUrl; 
+    const base    = options().api || apiUrl; 
     const jwt     = jwt_token();
     const headers = {
         'Content-Type': 'application/json' 
@@ -469,7 +496,7 @@ async function find_free_slot(id:string) {
 }
 
 async function create_process_group(id:string="root",template:string) {
-    const root = program.opts().root;
+    const root    = options().root;
     const jwt     = jwt_token();
     const headers = {
         'Content-Type': 'application/json' 
@@ -490,7 +517,7 @@ async function create_process_group(id:string="root",template:string) {
         }
     }
 
-    const base = program.opts().apiUrl || apiUrl; 
+    const base = options().api || apiUrl; 
 
     const origin_x = Math.trunc( nextSlot % 5 ) * X_OFFSET;
     const origin_y = Math.trunc( nextSlot / 5 ) * Y_OFFSET;
@@ -534,7 +561,7 @@ async function create_process_group(id:string="root",template:string) {
 }
 
 async function set_name(id:string,name:string) {
-    const base = program.opts().api || apiUrl; 
+    const base    = options().api || apiUrl; 
     const jwt     = jwt_token();
     const headers = {
         'Content-Type': 'application/json' 
@@ -580,7 +607,7 @@ async function set_name(id:string,name:string) {
 }
 
 async function delete_process_group(root:string,id:string) {
-    const base = program.opts().api || apiUrl; 
+    const base    = options().api || apiUrl; 
     const jwt     = jwt_token();
     const headers = {
         'Content-Type': 'application/json' 
