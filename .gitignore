@@ -9,6 +9,7 @@ local/institution/registry.ttl
 orchestrator
 package-lock.json
 etc/demo.txt
+etc/jwt
 solid/*.zip
 data/**
 DEVELOPMENT
