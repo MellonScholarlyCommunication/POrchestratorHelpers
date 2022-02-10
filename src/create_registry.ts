@@ -1,3 +1,7 @@
+/**
+ * Transform a local list of Webids into a foaf:knows turtle document.
+ * See: make registry
+ */
 import *  as N3 from 'n3';
 import { IQueryResultBindings } from "@comunica/actor-init-sparql";
 import { newEngine } from "@comunica/actor-init-sparql";

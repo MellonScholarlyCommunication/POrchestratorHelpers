@@ -1,3 +1,7 @@
+/**
+ * Nifi client to list/get/add/delete/set Orchestrators
+ * Used by Nifi API 
+ */
 import fetch from 'node-fetch';
 import { Command } from 'commander';
 import * as fs from "fs";

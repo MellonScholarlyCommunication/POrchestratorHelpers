@@ -1,3 +1,7 @@
+/**
+ * Guess the mimeType of a local file
+ * Used by the Nifi Solid mock server
+ */
 import * as mimetype from 'mimetype';
 
 if (process.argv.length != 3) {

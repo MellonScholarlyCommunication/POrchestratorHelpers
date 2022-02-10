@@ -1,3 +1,7 @@
+/**
+ * Clean local/{instution}/{name}/{inbox|events}
+ * See: make clean
+ */
 import * as fs from "fs";
 
 if (process.argv.length < 3) {

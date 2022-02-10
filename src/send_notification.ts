@@ -1,3 +1,6 @@
+/**
+ * Test tool to send a notification to an inbox
+ */
 import * as fs from "fs";
 import * as http from "http";
 

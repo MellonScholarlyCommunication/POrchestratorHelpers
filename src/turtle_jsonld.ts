@@ -1,3 +1,6 @@
+/**
+ * Command to convert Turtle files into JSON-LD
+ */
 import fs from 'fs';
 import * as N3 from 'n3';
 import * as jsonld from 'jsonld';

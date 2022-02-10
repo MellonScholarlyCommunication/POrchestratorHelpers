@@ -1,3 +1,7 @@
+/**
+ * Transforms a directory listing to a LDP Container
+ * Use by Nifi Solid mock server
+ */
 import * as fs from "fs";
 
 if (process.argv.length != 4) {

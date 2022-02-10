@@ -1,3 +1,6 @@
+/**
+ * Command line debug tool to display the signposting headers of a URL
+ */
 import fetch from 'node-fetch';
 import * as htmlparser2 from 'htmlparser2';
 import { Command } from 'commander';

@@ -1,3 +1,7 @@
+/**
+ * List all Biblio publications of a person as a LDP Container
+ * Part of Nifi Biblio demonstrator
+ */
 import fetch from 'node-fetch';
 import *  as N3 from 'n3';
 import ns from './Namespaces';

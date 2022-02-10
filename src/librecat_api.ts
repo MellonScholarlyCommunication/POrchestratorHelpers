@@ -1,3 +1,7 @@
+/**
+ * API to Librecat to list/get/add/delete records in a remote instance
+ * Used by Nifi (Librecat) registry demonstrators
+ */
 import fetch from 'node-fetch';
 import fs from 'fs';
 import *  as N3 from 'n3';
