@@ -2,5 +2,6 @@
     "api":"https://localhost:8443/nifi-api",
     "base":"http://localhost:9100",
     "jwt":"etc/jwt",
-    "root":"root"
+    "root":"root",
+    "obase":"/tmp"
 }

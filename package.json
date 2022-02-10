@@ -6,15 +6,18 @@
   "dependencies": {
     "@comunica/actor-init-sparql": "^1.22.0",
     "@comunica/actor-init-sparql-file": "^1.22.0",
+    "@frogcat/ttl2jsonld": "^0.0.6",
     "commander": "^8.2.0",
     "form-data": "^4.0.0",
     "htmlparser2": "^7.1.2",
     "http-link-header": "^1.0.3",
     "jsonld": "^5.2.0",
+    "jsonld-cli": "^0.3.0",
     "mimetype": "^0.0.8",
     "mustache": "^4.2.0",
     "n3": "^1.11.1",
     "node-fetch": "^2.6.1",
+    "project-name-generator": "^2.1.9",
     "solid-shell": "^2.0.6",
     "stream-consumers": "^0.1.0",
     "url-parse": "^1.5.3"

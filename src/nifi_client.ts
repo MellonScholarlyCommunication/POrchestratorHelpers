@@ -6,6 +6,8 @@ import fetch from 'node-fetch';
 import { Command } from 'commander';
 import * as fs from "fs";
 
+let generate = require('project-name-generator');
+
 // Ignore nifi default self-signed certificates
 process.env.NODE_TLS_REJECT_UNAUTHORIZED="0";
 
@@ -26,6 +28,7 @@ interface IOption {
     base: string;
     jwt: string;
     root: string;
+    obase: string;
 };
 
 async function main() {
@@ -35,6 +38,7 @@ async function main() {
            .option('-a,--api <api>','api url')
            .option('-b,--base <base>','base url')
            .option('-j,--jwt <jwt>','jwt token')
+           .option('-o,--obase <obase>','orchestrator base')
            .option('-r,--root <root>','root process node');
 
     program.command('login username password')
@@ -166,6 +170,9 @@ async function main() {
 
             // The slot.id is the only key we don't want to see
             delete data['slot.id'];
+
+            // The orchestrator.rules is a fixed local directory
+            delete data['orchestrator.rules'];
 
             const res = await set_variables(id,data);
 
@@ -501,6 +508,7 @@ async function find_free_slot(id:string) {
 
 async function create_process_group(id:string="root",template:string) {
     const root    = options().root;
+    const obase   = options().obase || '.';
     const jwt     = jwt_token();
     const headers = {
         'Content-Type': 'application/json' 
@@ -548,9 +556,12 @@ async function create_process_group(id:string="root",template:string) {
     const newid = data['flow']['processGroups'][0]['id'];
     const group = await get_process_group(newid);
 
-    const variables = group['variables'];
+    // Make a new rules directory for this process
+    fs.mkdirSync(`${obase}/${newid}`);
 
+    const variables = group['variables'];
     variables['slot.id'] = `${nextSlot}`;
+    variables['orchestrator.rules'] = `${obase}/${newid}`;
 
     const res = await set_variables(newid,variables);
 
@@ -560,6 +571,10 @@ async function create_process_group(id:string="root",template:string) {
             message: `created ${newid} failed to set slot.id`
         }
     }
+
+    // Set a new name
+    const name = generate().dashed;
+    await set_name(newid,`Orchestrator - ${name}`);
 
     return await get_process_group(newid);
 }
