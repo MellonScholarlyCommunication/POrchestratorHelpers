@@ -10,7 +10,7 @@ if (!flowFile) return
 def outputRelation = REL_SUCCESS
 
 try {
-    def postParam = [:]
+    def postParam = [:] as Map<String,String>
 
     session.read(flowFile , { inputStream ->
         def paramStr = inputStream.getText()
@@ -23,14 +23,12 @@ try {
                 def name  = URLDecoder.decode(nv[0],"UTF-8")
                 def value = URLDecoder.decode(nv[1],"UTF-8")
 
-                postParam[name] = value
+                postParam["http.post.param." + name] = value
             }
         }
     } as InputStreamCallback)
 
-    for (p in postParam) {
-        flowFile = session.putAttribute(flowFile, "http.post.param." + p.key, p.value)
-    }
+    flowFile = session.putAllAttributes(flowFile, postParam)
 }
 catch(e) {
     outputRelation = REL_FAILURE
