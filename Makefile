@@ -1,4 +1,4 @@
-.PHONY: compile watch rules registry archivator clean
+.PHONY: compile watch rules registry archivator keys clean
 
 usage:
 	@echo "usage: make TARGET"
@@ -9,6 +9,7 @@ usage:
 	@echo "    watch"
 	@echo "    rules"
 	@echo "    registry"
+	@echo "    keys"
 	@echo "    clean"
 	@echo 
 	@echo "remote targets:"
@@ -28,6 +29,9 @@ watch:
 
 rules:
 	bin/make_rules.sh
+
+keys:
+	bin/make_pem.sh etc
 
 registry:
 	node js/create_registry.js parse etc/demo.txt > local/institution/registry.ttl

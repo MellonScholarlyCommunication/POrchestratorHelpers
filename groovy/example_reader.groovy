@@ -28,6 +28,7 @@ def cli = new CliBuilder()
 cli.with {
     b(longOpt: 'baseUrl', 'Set baseUrl', args: 1, required: false)
 }
+
 def options = cli.parse(args)
 
 if (options && options.b) {

@@ -10,6 +10,8 @@ orchestrator
 package-lock.json
 etc/demo.txt
 etc/jwt
+etc/nifi.json
+etc/*.pem
 solid/*.zip
 data/**
 DEVELOPMENT

@@ -1,5 +1,5 @@
 /*
-Decode DPoP header into a JWT attribute
+Decode jwt.token into a jwt.header + jwt.payload attributes
 */
 
 @Grab(group='com.auth0', module='java-jwt', version='3.18.3')
@@ -15,7 +15,7 @@ if (!flowFile) return
 outputRelation = REL_SUCCESS
 
 try {
-    def dpop = flowFile.getAttribute("http.headers.DPoP")
+    def dpop = flowFile.getAttribute("jwt.token")
 
     def jwt = JWT.decode(dpop)
 
