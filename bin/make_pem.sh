@@ -9,6 +9,6 @@ if [[ ! -d ${DIR} ]]; then
 fi
 
 openssl ecparam -name ${CURVE} -genkey -noout | \
-    openssl pkcs8 -topk8 -nocrypt -in - -out ${DIR}/private.pem
+    openssl pkcs8 -topk8 -nocrypt -in /dev/stdin -out ${DIR}/private.pem
 
 openssl ec -in ${DIR}/private.pem -pubout -out ${DIR}/public.pem
