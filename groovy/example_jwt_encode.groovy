@@ -67,8 +67,10 @@ try {
 
     def payload   = new JsonSlurper().parseText(new File(json).getText('UTF-8'))
 
+    def kid       = pubKey.getEncoded().digest('SHA-256')
     def algorithm = Algorithm.ECDSA256(pubKey,privKey)
     def token     = JWT.create()
+                       .withHeader(["kid":kid])
                        .withPayload(payload)
                        .sign(algorithm)
 

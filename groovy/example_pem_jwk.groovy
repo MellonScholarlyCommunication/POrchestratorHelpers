@@ -67,6 +67,11 @@ if (privateFile) {
    jwk = jwk.privateKey(privateKey)
 }
 
-jwk = jwk.keyUse(KeyUse.SIGNATURE).algorithm(JWSAlgorithm.ES256).build()
+def kid = publicKey.getEncoded().digest('SHA-256')
+
+jwk = jwk.keyUse(KeyUse.SIGNATURE)
+         .keyID(kid)
+         .algorithm(JWSAlgorithm.ES256)
+         .build()
 
 println(jwk)

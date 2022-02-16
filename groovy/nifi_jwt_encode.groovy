@@ -69,12 +69,15 @@ try {
     def pubKey    = getPublicKey(publicFile)
     def privKey   = getPrivateKey(privateFile)
 
+    def kid       = pubKey.getEncoded().digest('SHA-256')
+
     def algorithm = Algorithm.ECDSA256(pubKey,privKey)
     def token     = JWT.create()
+                       .withHeader(["kid":kid])
                        .withPayload(payload)
                        .sign(algorithm)
 
-    def headerJson = '{"typ":"JWT","alg":"ES256"}'
+    def headerJson = '{' + '"kid":"' + kid + '","typ":"JWT","alg":"ES256"}'
     
     flowFile = session.putAttribute(flowFile, "jwt.header", headerJson)
     flowFile = session.putAttribute(flowFile, "jwt.token", token)
