@@ -1,14 +1,12 @@
 #!/usr/bin/env groovy
 
-@Grab(group='com.auth0', module='java-jwt', version='3.18.3')
+@Grab(group='com.nimbusds', module='nimbus-jose-jwt', version='9.19')
 
-import java.io.File
 import java.security.KeyFactory
-import java.security.spec.X509EncodedKeySpec
 import java.security.spec.PKCS8EncodedKeySpec
-import com.auth0.jwt.algorithms.Algorithm
-import com.auth0.jwt.JWT
-import groovy.json.JsonSlurper
+import java.security.spec.X509EncodedKeySpec
+import com.nimbusds.jose.*
+import com.nimbusds.jose.jwk.*
 
 def getPublicKey(fileName) {
     def str = new File(fileName).getText('UTF-8')
@@ -52,29 +50,21 @@ cli.with {
 }
 
 def options = cli.parse(args)
-def publicFile  = options.pu
-def privateFile = options.pi
-def json        = options.arguments()[0]
 
-if (!json || !publicFile || !privateFile) {
-    System.err.println('usage: example_jwt_encode.groovy --public <file> --private <file> payload')
+if (!options) {
     System.exit(1)
 }
 
-try {
-    def pubKey    = getPublicKey(publicFile)
-    def privKey   = getPrivateKey(privateFile)
+def publicFile  = options.pu
+def privateFile = options.pi
 
-    def payload   = new JsonSlurper().parseText(new File(json).getText('UTF-8'))
+def publicKey  = getPublicKey(publicFile)
+def privateKey = getPrivateKey(privateFile) 
 
-    def algorithm = Algorithm.ECDSA256(pubKey,privKey)
-    def token     = JWT.create()
-                       .withPayload(payload)
-                       .sign(algorithm)
+def jwk = new ECKey.Builder(Curve.P_256,publicKey)
+                   .privateKey(privateKey)
+                   .keyUse(KeyUse.SIGNATURE)
+                   .algorithm(JWSAlgorithm.ES256) 
+                   .build()
 
-    println(token)
-}
-catch (ex) {
-    System.err.println(ex)
-    System.exit(2)
-}
+println(jwk)
