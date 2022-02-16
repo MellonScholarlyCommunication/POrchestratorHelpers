@@ -62,13 +62,15 @@ try {
     def privateFile = flowFile.getAttribute("jwt.private") 
 
     def publicKey  = getPublicKey(publicFile)
-    def privateKey = getPrivateKey(privateFile) 
 
     def jwk = new ECKey.Builder(Curve.P_256,publicKey)
-                   .privateKey(privateKey)
-                   .keyUse(KeyUse.SIGNATURE)
-                   .algorithm(JWSAlgorithm.ES256) 
-                   .build()
+
+    if (privateFile) {
+        def privateKey = getPrivateKey(privateFile) 
+        jwk = jwk.privateKey(privateKey)
+    }
+
+    jwk = jwk.keyUse(KeyUse.SIGNATURE).algorithm(JWSAlgorithm.ES256).build()
 
     def text = "{\"keys\":[" + jwk + "]}" 
     flowFile = session.write(flowFile , { outputStream ->
