@@ -1,5 +1,9 @@
 /*
-Decode jwt.token into a jwt.header + jwt.payload attributes
+    Decode jwt.token into a jwt.header + jwt.payload attributes
+
+    Requires:
+
+        - jwt.token
 */
 
 @Grab(group='com.auth0', module='java-jwt', version='3.18.3')
