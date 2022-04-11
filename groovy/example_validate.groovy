@@ -13,7 +13,8 @@ import org.topbraid.shacl.validation.ValidationUtil
 import org.topbraid.jenax.util.JenaDatatypes
 import org.topbraid.shacl.vocabulary.SH
 import org.apache.jena.rdf.model.ModelFactory
-import java.io.FileInputStream;
+import java.io.FileInputStream
+import groovy.cli.commons.CliBuilder
 
 def loadModel(fileName, type, baseUrl="urn:dummy") {
     Model model = ModelFactory.createDefaultModel()

@@ -14,6 +14,7 @@ import org.apache.jena.rdf.model.ModelFactory
 import org.apache.jena.riot.RDFDataMgr
 import org.apache.jena.riot.RDFFormat
 import java.io.FileInputStream
+import groovy.cli.commons.CliBuilder
 
 def loadModel(fileName, type, baseUrl="urn:dummy") {
     Model model = ModelFactory.createDefaultModel()

@@ -5,6 +5,7 @@
 import com.auth0.jwt.*
 import java.util.Base64
 import java.nio.charset.StandardCharsets
+import groovy.cli.commons.CliBuilder
 
 def cli = new CliBuilder()
 

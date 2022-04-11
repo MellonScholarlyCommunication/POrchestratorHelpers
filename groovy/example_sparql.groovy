@@ -19,6 +19,7 @@ import org.apache.jena.query.QueryFactory
 import org.apache.jena.query.QueryExecutionFactory
 import org.apache.jena.query.ResultSetFormatter
 import java.io.FileInputStream
+import groovy.cli.commons.CliBuilder
 
 def loadModel(fileName, type, baseUrl="urn:dummy") {
     Model model = ModelFactory.createDefaultModel()

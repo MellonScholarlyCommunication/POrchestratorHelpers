@@ -7,6 +7,7 @@ import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
 import com.nimbusds.jose.*
 import com.nimbusds.jose.jwk.*
+import groovy.cli.commons.CliBuilder
 
 def getPublicKey(fileName) {
     def str = new File(fileName).getText('UTF-8')

@@ -4,6 +4,7 @@
 
 import com.nimbusds.jose.*
 import com.nimbusds.jose.jwk.*
+import groovy.cli.commons.CliBuilder
 
 def jwkPublicKey(json) {
     def jwk = JWK.parse(json)

@@ -15,6 +15,7 @@ import org.topbraid.shacl.rules.RuleUtil
 import org.topbraid.shacl.util.ModelPrinter
 import org.apache.jena.rdf.model.ModelFactory
 import java.io.FileInputStream;
+import groovy.cli.commons.CliBuilder
 
 def loadModel(fileName, type, baseUrl="urn:dummy") {
     Model model = ModelFactory.createDefaultModel()

@@ -9,6 +9,7 @@ import java.security.spec.PKCS8EncodedKeySpec
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.JWT
 import groovy.json.JsonSlurper
+import groovy.cli.commons.CliBuilder
 
 def getPublicKey(fileName) {
     def str = new File(fileName).getText('UTF-8')
